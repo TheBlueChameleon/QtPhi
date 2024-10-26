@@ -2,6 +2,7 @@
 #define CONCEPTS_H
 
 #include <concepts>
+#include <utility>
 
 namespace Base
 {
@@ -17,14 +18,20 @@ namespace Base
     template<PixelOrReal T>
     class Coordinate;
 
-    using PixelCoordinates = Coordinate<Pixel>;
-    using RealCoordinates = Coordinate<Real>;
+    using PixelCoordinate = Coordinate<Pixel>;
+    using RealCoordinate = Coordinate<Real>;
 
     using Scalar = Real;
-    using Vector = RealCoordinates;
+    using Vector = RealCoordinate;
 
     template<typename T>
     concept EitherScalarOrVector = Base::EitherOr<T, Scalar, Vector>;
+
+    using PixelCoordinatePair = std::pair<PixelCoordinate, PixelCoordinate>;
+    using RealCoordinatePair = std::pair<RealCoordinate, RealCoordinate>;
+
+    template<typename T>
+    concept CoordinatePair = Base::EitherOr<T, PixelCoordinatePair, RealCoordinatePair>;
 }
 
 #endif // CONCEPTS_H

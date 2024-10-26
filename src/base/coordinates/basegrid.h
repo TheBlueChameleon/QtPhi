@@ -4,6 +4,7 @@
 #include <vector>
 
 #include "grid.h"
+#include "rect.h"
 
 namespace Base
 {
@@ -11,34 +12,36 @@ namespace Base
     class BaseGrid : public Grid<T>
     {
         protected:
-            PixelCoordinates size;
-            PixelCoordinates origin;
+            Rect<Pixel> dimensions;
+
+            PixelCoordinate size;
+            PixelCoordinate origin;
             Real gridConstant;
             std::vector<T> values;
 
         public:
-            BaseGrid(PixelCoordinates size, Real gridConstant);
+            BaseGrid(PixelCoordinate size, Real gridConstant);
 
             // Grid interface
-            PixelCoordinates getPixelSize() const;
-            RealCoordinates getRealSize() const;
+            PixelCoordinate getPixelSize() const;
+            RealCoordinate getRealSize() const;
 
             Real getGridConstant() const;
 
-            PixelCoordinates getPixelOrigin() const;
-            RealCoordinates getRealOrigin() const;
-            void setOrigin(const PixelCoordinates& o);
-            void setOrigin(const RealCoordinates& o);
+            PixelCoordinate getPixelOrigin() const;
+            RealCoordinate getRealOrigin() const;
+            void setOrigin(const PixelCoordinate& o);
+            void setOrigin(const RealCoordinate& o);
 
-            PixelCoordinates getMinPixelCoordinates() const;
-            PixelCoordinates getMaxPixelCoordinates() const;
-            RealCoordinates getMinRealCoordinates() const;
-            RealCoordinates getMaxRealCoordinates() const;
+            PixelCoordinate getMinPixelCoordinates() const;
+            PixelCoordinate getMaxPixelCoordinates() const;
+            RealCoordinate getMinRealCoordinates() const;
+            RealCoordinate getMaxRealCoordinates() const;
 
-            T& at(const RealCoordinates& c);
-            T& at(const PixelCoordinates& c);
-            T& operator [](const PixelCoordinates& c);
-            T& operator [](const RealCoordinates& c);
+            T& at(const RealCoordinate& c);
+            T& at(const PixelCoordinate& c);
+            T& operator [](const PixelCoordinate& c);
+            T& operator [](const RealCoordinate& c);
     };
 }
 

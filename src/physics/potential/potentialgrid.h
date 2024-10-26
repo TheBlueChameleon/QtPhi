@@ -9,18 +9,18 @@ namespace Physics
     {
 
         private:
-            void imposeImpl_noAcceleration(const PotentialGrid& potential, const Base::PixelCoordinates& minIdxs, const Base::PixelCoordinates& maxIdxs, const Base::PixelCoordinates& startIdxs);
-            void imposeImpl_avxAccelerated(const PotentialGrid& potential, const Base::PixelCoordinates& minIdxs, const Base::PixelCoordinates& maxIdxs, const Base::PixelCoordinates& startIdxs);
+            void imposeImpl_noAcceleration(const PotentialGrid& potential, const Base::PixelCoordinate& minIdxs, const Base::PixelCoordinate& maxIdxs, const Base::PixelCoordinate& startIdxs);
+            void imposeImpl_avxAccelerated(const PotentialGrid& potential, const Base::PixelCoordinate& minIdxs, const Base::PixelCoordinate& maxIdxs, const Base::PixelCoordinate& startIdxs);
 
         public:
             PotentialGrid();
-            PotentialGrid(Base::PixelCoordinates size, Base::Real gridConstant, Base::Real level = 0);
+            PotentialGrid(Base::PixelCoordinate size, Base::Real gridConstant, Base::Real level = 0);
 
-            Base::PixelCoordinates getMinimumImposeIndices(const PotentialGrid& potential, const Base::PixelCoordinates at) const;
-            Base::PixelCoordinates getMaximumImposeIndices(const PotentialGrid& potential, const Base::PixelCoordinates at) const;
+            Base::PixelCoordinate getMinimumImposeIndices(const PotentialGrid& potential, const Base::PixelCoordinate at) const;
+            Base::PixelCoordinate getMaximumImposeIndices(const PotentialGrid& potential, const Base::PixelCoordinate at) const;
 
-            void imposeAt(const PotentialGrid& potential, const Base::RealCoordinates  at);
-            void imposeAt(const PotentialGrid& potential, const Base::PixelCoordinates at);
+            void imposeAt(const PotentialGrid& potential, const Base::RealCoordinate  at);
+            void imposeAt(const PotentialGrid& potential, const Base::PixelCoordinate at);
 
             std::string to_string() const;
     };

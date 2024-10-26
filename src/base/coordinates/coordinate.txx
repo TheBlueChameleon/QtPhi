@@ -67,7 +67,7 @@ namespace Base
     }
 
     template<PixelOrReal T>
-    std::array<T, 4> getRectSorted(const Coordinate<T>& boundary1, const Coordinate<T>& boundary2)
+    std::array<T, 4> getBoundariesSorted(const Coordinate<T>& boundary1, const Coordinate<T>& boundary2)
     {
         T x1 = boundary1.x;
         T x2 = boundary2.x;
@@ -85,7 +85,7 @@ namespace Base
     template<PixelOrReal T>
     bool isWithin(const Coordinate<T>& point, const Coordinate<T>& boundary1, const Coordinate<T>& boundary2)
     {
-        const auto [x1, x2, y1, y2] = getRectSorted(boundary1, boundary2);
+        const auto [x1, x2, y1, y2] = getBoundariesSorted(boundary1, boundary2);
 
         if (x1 <= point.x && point.x < x2)
         {

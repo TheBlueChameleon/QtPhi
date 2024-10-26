@@ -1,6 +1,7 @@
 #include <QTest>
 
 #include "base/coordinatetest.h"
+#include "base/recttest.h"
 
 int main(int argc, char* argv[])
 {
@@ -13,6 +14,7 @@ int main(int argc, char* argv[])
 
     // run suite
     runTest(new CoordinateTest);
+    runTest(new RectTest);
 
     return status;
 }

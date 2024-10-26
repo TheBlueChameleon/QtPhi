@@ -11,6 +11,8 @@ namespace Base
     template<PixelOrReal T>
     struct Coordinate
     {
+        using baseType = T;
+
         T x;
         T y;
 
@@ -31,13 +33,13 @@ namespace Base
     Coordinate<T> max(const Coordinate<T>& a, const Coordinate<T>& b);
 
     template<PixelOrReal T>
-    std::array<T, 4> getRectSorted(const Coordinate<T>& boundary1, const Coordinate<T>& boundary2);
+    std::array<T, 4> getBoundariesSorted(const Coordinate<T>& boundary1, const Coordinate<T>& boundary2);
 
     template<PixelOrReal T>
     bool isWithin(const Coordinate<T>& point, const Coordinate<T>& boundary1, const Coordinate<T>& boundary2);
 
-    PixelCoordinates toPixelCoordinates(const RealCoordinates& c, Real gridConstant);
-    RealCoordinates  toRealCoordinates(const PixelCoordinates& c, Real gridConstant);
+    PixelCoordinate toPixelCoordinates(const RealCoordinate& c, Real gridConstant);
+    RealCoordinate  toRealCoordinates(const PixelCoordinate& c, Real gridConstant);
 }
 
 #endif // COORDINATES_H

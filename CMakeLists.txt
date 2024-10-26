@@ -40,9 +40,11 @@ include_directories(
 
 add_library(Phi-base STATIC
     src/base/base.h
+    src/base/concepts.h
     src/base/errors.h src/base/errors.cpp
-    src/base/coordinates/grid.h
     src/base/coordinates/coordinate.h   src/base/coordinates/coordinate.txx src/base/coordinates/coordinate.cpp
+    src/base/coordinates/rect.h         src/base/coordinates/rect.txx       src/base/coordinates/rect.cpp
+    src/base/coordinates/grid.h
     src/base/coordinates/basegrid.h     src/base/coordinates/basegrid.txx   src/base/coordinates/basegrid.cpp
 )
 
@@ -64,9 +66,7 @@ endif()
 
 set(UI_SOURCES
         src/main.cpp
-        src/ui/mainwindow.cpp
-        src/ui/mainwindow.h
-        src/ui/mainwindow.ui
+        src/ui/mainwindow.h src/ui/mainwindow.cpp src/ui/mainwindow.ui
 )
 
 # ============================================================================ #
@@ -143,6 +143,7 @@ endif()
 add_executable(unittest
     unittest/unittest_main.cpp
     unittest/base/coordinatetest.h unittest/base/coordinatetest.cpp
+    unittest/base/recttest.h unittest/base/recttest.cpp
 )
 
 target_link_libraries(unittest PRIVATE
@@ -153,3 +154,10 @@ target_link_libraries(unittest PRIVATE
     Qt6::Test
     Qt6::Widgets
 )
+
+# ............................................................................ #
+# static assert test files
+
+# add_executable(unittest_failToCompile
+#     unittest/assertFailToCompile.cpp
+# )

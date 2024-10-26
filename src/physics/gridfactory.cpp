@@ -5,9 +5,9 @@
 using namespace Base;
 namespace Physics
 {
-    const PixelCoordinates GridFactory::USE_DEFAULT = PixelCoordinates(-1, -1);
+    const PixelCoordinate GridFactory::USE_DEFAULT = PixelCoordinate(-1, -1);
 
-    GridFactory::GridFactory(PixelCoordinates size, Real gridConstant) :
+    GridFactory::GridFactory(PixelCoordinate size, Real gridConstant) :
         size(size), gridConstant(gridConstant)
     {}
 
@@ -16,7 +16,7 @@ namespace Physics
         return PotentialGrid(size, gridConstant);
     }
 
-    PotentialGrid GridFactory::makeOverlayAtConstantLevel(Real level, PixelCoordinates size) const
+    PotentialGrid GridFactory::makeOverlayAtConstantLevel(Real level, PixelCoordinate size) const
     {
         PotentialGrid result;
         if (size == USE_DEFAULT)
@@ -43,10 +43,10 @@ namespace Physics
         Pixel cutoffSize = std::abs(charge / (cutoff * gridConstant));
         cutoffSize += !(cutoffSize & 1);   // guarantee this is an odd number
 
-        PixelCoordinates createdSize = {getSizeLimitedToDoubleWorldSize(cutoffSize, size.x),
+        PixelCoordinate createdSize = {getSizeLimitedToDoubleWorldSize(cutoffSize, size.x),
                                         getSizeLimitedToDoubleWorldSize(cutoffSize, size.y)
                                        };
-        PixelCoordinates quadrantSize = createdSize / 2;
+        PixelCoordinate quadrantSize = createdSize / 2;
         PotentialGrid result = PotentialGrid(createdSize, gridConstant);
         result.setOrigin(quadrantSize);
 
@@ -57,14 +57,14 @@ namespace Physics
             for (int x = (y == 0); x < quadrantSize.x; ++x)
             {
                 const Real value = charge / std::sqrt(x*x + y*y);
-                result[PixelCoordinates{+x, +y}] = value;
-                result[PixelCoordinates{-x, +y}] = value;
-                result[PixelCoordinates{+x, -y}] = value;
-                result[PixelCoordinates{-x, -y}] = value;
+                result[PixelCoordinate{+x, +y}] = value;
+                result[PixelCoordinate{-x, +y}] = value;
+                result[PixelCoordinate{+x, -y}] = value;
+                result[PixelCoordinate{-x, -y}] = value;
             }
         }
 
-        result[PixelCoordinates{0, 0}] = 2 * charge / gridConstant;
+        result[PixelCoordinate{0, 0}] = 2 * charge / gridConstant;
 
         return result;
     }

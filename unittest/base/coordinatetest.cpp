@@ -7,26 +7,26 @@ using namespace Base;
 
 void CoordinateTest::add_sub_neg()
 {
-    PixelCoordinates p {1,2}, q {3,4};
+    PixelCoordinate p {1,2}, q {3,4};
 
-    PixelCoordinates add = p + q;
-    QVERIFY(add == PixelCoordinates(4, 6));
+    PixelCoordinate add = p + q;
+    QVERIFY(add == PixelCoordinate(4, 6));
 
-    PixelCoordinates sub = p - q;
-    QVERIFY(sub == PixelCoordinates(-2, -2));
+    PixelCoordinate sub = p - q;
+    QVERIFY(sub == PixelCoordinate(-2, -2));
 
-    PixelCoordinates neg = -p;
-    QVERIFY(neg == PixelCoordinates(-1, -2));
+    PixelCoordinate neg = -p;
+    QVERIFY(neg == PixelCoordinate(-1, -2));
 }
 
 void CoordinateTest::mul_div()
 {
-    RealCoordinates p {1.5, 2.5};
+    RealCoordinate p {1.5, 2.5};
 
-    RealCoordinates mul = p * 2;
-    RealCoordinates div = p / 0.5;
+    RealCoordinate mul = p * 2;
+    RealCoordinate div = p / 0.5;
 
-    QVERIFY(mul == RealCoordinates(3, 5));
+    QVERIFY(mul == RealCoordinate(3, 5));
     QVERIFY(mul == div);
 }
 
