@@ -8,15 +8,46 @@
 namespace Base
 {
     template<EitherScalarOrVector T>
+    BaseGrid<T>::BaseGrid(const PixelRect& dimensions, const Real gridConstant):
+        dimensions(dimensions),
+        gridConstant(gridConstant),
+        values(std::vector<T>(dimensions.w * dimensions.h))
+    {}
+
+    template<EitherScalarOrVector T>
+    PixelRect BaseGrid<T>::getPixelDimensions() const
+    {
+        return dimensions;
+    }
+
+    template<EitherScalarOrVector T>
+    RealRect BaseGrid<T>::getRealDimensions() const
+    {
+        return RealRect(RealCoordinatePair(getRealOrigin(), getRealSize()));
+    }
+
+    template<EitherScalarOrVector T>
+    PixelCoordinate BaseGrid<T>::getPixelOrigin() const
+    {
+        return PixelCoordinate(dimensions.x, dimensions.y);
+    }
+
+    template<EitherScalarOrVector T>
     PixelCoordinate BaseGrid<T>::getPixelSize() const
     {
-        return size;
+        return PixelCoordinate(dimensions.w, dimensions.h);
+    }
+
+    template<EitherScalarOrVector T>
+    RealCoordinate BaseGrid<T>::getRealOrigin() const
+    {
+        return toRealCoordinate(getPixelOrigin(), gridConstant);
     }
 
     template<EitherScalarOrVector T>
     RealCoordinate BaseGrid<T>::getRealSize() const
     {
-        return toRealCoordinates(size, gridConstant);
+        return toRealCoordinate(getPixelSize(), gridConstant);
     }
 
     template<EitherScalarOrVector T>
@@ -26,78 +57,31 @@ namespace Base
     }
 
     template<EitherScalarOrVector T>
-    BaseGrid<T>::BaseGrid(PixelCoordinate size, Real gridConstant) :
-        size(size), gridConstant(gridConstant)
+    void BaseGrid<T>::setOrigin(const PixelCoordinate& origin)
     {
-        if (size.x < 0 || size.y < 0)
+        dimensions.x = origin.x;
+        dimensions.y = origin.y;
+    }
+
+    template<EitherScalarOrVector T>
+    void BaseGrid<T>::setOrigin(const RealCoordinate& origin)
+    {
+        setOrigin(toPixelCoordinate(origin, gridConstant));
+    }
+
+    template<EitherScalarOrVector T>
+    T& BaseGrid<T>::at(const RealCoordinate& coordinate)
+    {
+        PixelCoordinate pixelCoordinate = toPixelCoordinate(coordinate, gridConstant);
+        return at(pixelCoordinate);
+    }
+
+    template<EitherScalarOrVector T>
+    T& BaseGrid<T>::at(const PixelCoordinate& coordinate)
+    {
+        if (this->dimensions.contains(coordinate))
         {
-            throw DimensionError("Negative Grid Size");
-        }
-        values = std::vector<T>(size.x * size.y);
-        origin = {0, 0};
-    }
-
-    template<EitherScalarOrVector T>
-    PixelCoordinate BaseGrid<T>::getPixelOrigin() const
-    {
-        return origin;
-    }
-
-    template<EitherScalarOrVector T>
-    RealCoordinate BaseGrid<T>::getRealOrigin() const
-    {
-        return toRealCoordinates(origin, gridConstant);
-    }
-
-    template<EitherScalarOrVector T>
-    void BaseGrid<T>::setOrigin(const PixelCoordinate& o)
-    {
-        origin = o;
-    }
-
-    template<EitherScalarOrVector T>
-    void BaseGrid<T>::setOrigin(const RealCoordinate& o)
-    {
-        origin = toPixelCoordinates(o, gridConstant);
-    }
-
-    template<EitherScalarOrVector T>
-    PixelCoordinate BaseGrid<T>::getMinPixelCoordinates() const
-    {
-        return -origin;
-    }
-
-    template<EitherScalarOrVector T>
-    PixelCoordinate BaseGrid<T>::getMaxPixelCoordinates() const
-    {
-        return size - origin;
-    }
-
-    template<EitherScalarOrVector T>
-    RealCoordinate BaseGrid<T>::getMinRealCoordinates() const
-    {
-        return toRealCoordinates(getMinPixelCoordinates(), gridConstant);
-    }
-
-    template<EitherScalarOrVector T>
-    RealCoordinate BaseGrid<T>::getMaxRealCoordinates() const
-    {
-        return toRealCoordinates(getMaxPixelCoordinates(), gridConstant);
-    }
-
-    template<EitherScalarOrVector T>
-    T& BaseGrid<T>::at(const RealCoordinate& c)
-    {
-        PixelCoordinate cp = toPixelCoordinates(c, gridConstant);
-        return at(cp);
-    }
-
-    template<EitherScalarOrVector T>
-    T& BaseGrid<T>::at(const PixelCoordinate& c)
-    {
-        if (isWithin(c, getMinPixelCoordinates(), getMaxPixelCoordinates()))
-        {
-            return (*this)[c];
+            return (*this)[coordinate];
         }
         else
         {
@@ -106,18 +90,18 @@ namespace Base
     }
 
     template<EitherScalarOrVector T>
-    T& BaseGrid<T>::operator [](const PixelCoordinate& c)
+    T& BaseGrid<T>::operator [](const PixelCoordinate& coordinate)
     {
-        const auto shifted = c + origin;
-        const Pixel index = shifted.y * size.x + shifted.x;
+        const auto shiftedByOrigin = coordinate + dimensions.getMin();
+        const Pixel index = shiftedByOrigin.y * dimensions.w + shiftedByOrigin.x;
         return values[index];
     }
 
     template<EitherScalarOrVector T>
-    T& BaseGrid<T>::operator [](const RealCoordinate& c)
+    T& BaseGrid<T>::operator [](const RealCoordinate& coordinate)
     {
-        PixelCoordinate cp = toPixelCoordinates(c, gridConstant);
-        return (*this)[cp];
+        PixelCoordinate pixelCoordinate = toPixelCoordinate(coordinate, gridConstant);
+        return (*this)[pixelCoordinate];
     }
 }
 

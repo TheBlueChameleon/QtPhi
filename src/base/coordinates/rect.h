@@ -16,14 +16,14 @@ namespace Base
 
         Rect();
         Rect(const T x, const T y, const T w, const T h);
-
-        template<CoordinatePair P>
-        Rect(const P& p);
+        template<CoordinatePair P> Rect(const P& p);
 
         Coordinate<T> getMin() const;
         Coordinate<T> getMax() const;
 
         bool contains(Coordinate<T> p) const;
+
+        bool operator==(const Rect<T>& rhs) const = default;
     };
 }
 #endif // RECT_H

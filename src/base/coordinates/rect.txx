@@ -1,3 +1,4 @@
+#include <algorithm>
 #include <format>
 #include <string>
 
@@ -7,9 +8,19 @@
 namespace Base
 {
     template<PixelOrReal T>
+    void assertPositiveExtent(const Rect<T>& r)
+    {
+        if (r.w < 0 || r.h < 0)
+        {
+            const std::string errMsg = std::format("Negative dimensions encountered: w={}, h={}", r.w, r.h);
+            throw DimensionError(errMsg);
+        }
+    }
+
+    template<PixelOrReal T>
     Rect<T>::Rect() :
         x(0), y(0),
-        w(0), h(0)
+        w(1), h(1)
     {}
 
     template<PixelOrReal T>
@@ -17,29 +28,42 @@ namespace Base
         x(x), y(y),
         w(w), h(h)
     {
-        if (w < 0 || h < 0)
-        {
-            const std::string errMsg = std::format("Negative dimensions encountered: w={}, h={}", w, h);
-            throw DimensionError(errMsg);
-        }
+        assertPositiveExtent(*this);
     }
 
     template<PixelOrReal T>
     template<CoordinatePair P>
-    Rect<T>::Rect(const P &p):
-        x(p.first.x), y(p.first.y),
-        w(p.second.x), h(p.second.y)
+    Rect<T>::Rect(const P& p)
     {
         static_assert(
             std::is_same_v<T, typename P::first_type::baseType>,
             "type mismatch in CTOR Rect from CoordinatePair"
         );
+
+        const auto [x1, x2] = std::minmax(p.first.x, p.second.x);
+        const auto [y1, y2] = std::minmax(p.first.y, p.second.y);
+
+        this->x = x1;
+        this->y = y1;
+        this->w = x2 - x1 + (std::is_integral_v<T>);
+        this->h = y2 - y1 + (std::is_integral_v<T>);
+
+        assertPositiveExtent(*this);
     }
 
     template<PixelOrReal T>
     Coordinate<T> Rect<T>::getMin() const
     {
         return Coordinate<T>(x, y);
+    }
+
+    template<PixelOrReal T>
+    Coordinate<T> Rect<T>::getMax() const
+    {
+        return Coordinate<T>(
+                   x + w - std::is_integral_v<T>,
+                   y + h - std::is_integral_v<T>
+               );
     }
 
     template<PixelOrReal T>

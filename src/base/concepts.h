@@ -32,6 +32,12 @@ namespace Base
 
     template<typename T>
     concept CoordinatePair = Base::EitherOr<T, PixelCoordinatePair, RealCoordinatePair>;
+
+    template<PixelOrReal T>
+    class Rect;
+
+    using PixelRect = Rect<Pixel>;
+    using RealRect = Rect<Real>;
 }
 
 #endif // CONCEPTS_H

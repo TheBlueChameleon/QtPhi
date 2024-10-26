@@ -41,11 +41,23 @@ void RectTest::ctor()
         Rect(0, 0, 0, -1)
     );
 
-    Base::PixelCoordinatePair pp(PixelCoordinate(0, 0), PixelCoordinate(1,1));
-    Base::RealCoordinatePair rp(RealCoordinate(0, 0), RealCoordinate(1,1));
+    Base::PixelCoordinatePair pp1(PixelCoordinate(0, 0), PixelCoordinate(1, 1));
+    Base::PixelCoordinatePair pp2(PixelCoordinate(0, 1), PixelCoordinate(1, 0));
+    Rect<Pixel> pr1(pp1), pr2(pp2);
 
-    Rect<Pixel> pr(pp);
-    Rect<Real>  rr(rp);
+    QCOMPARE(pr1.getMin(), PixelCoordinate(0, 0));
+    QCOMPARE(pr1.w, 2);
+    QCOMPARE(pr1.h, 2);
+    QCOMPARE(pr1, pr2);
+
+    Base::RealCoordinatePair  rp1(RealCoordinate(0.0, 0.0), RealCoordinate(1.0, 1.0));
+    Base::RealCoordinatePair  rp2(RealCoordinate(0.0, 1.0), RealCoordinate(1.0, 0.0));
+    Rect<Real>  rr1(rp1), rr2(rp2);
+
+    QCOMPARE(rr1.getMin(), RealCoordinate(0.0, 0.0));
+    QCOMPARE(rr1.w, 1.0);
+    QCOMPARE(rr1.h, 1.0);
+    QCOMPARE(rr1, rr2);
 }
 
 void RectTest::getMinMax()

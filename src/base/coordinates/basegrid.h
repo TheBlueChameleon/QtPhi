@@ -12,36 +12,33 @@ namespace Base
     class BaseGrid : public Grid<T>
     {
         protected:
-            Rect<Pixel> dimensions;
-
-            PixelCoordinate size;
-            PixelCoordinate origin;
-            Real gridConstant;
-            std::vector<T> values;
+            PixelRect       dimensions;
+            Real            gridConstant;
+            std::vector<T>  values;
 
         public:
-            BaseGrid(PixelCoordinate size, Real gridConstant);
+            BaseGrid(const PixelRect& dimensions, const Real gridConstant);
 
             // Grid interface
+            PixelRect getPixelDimensions() const;
+            RealRect  getRealDimensions() const;
+
+            PixelCoordinate getPixelOrigin() const;
             PixelCoordinate getPixelSize() const;
+
+            RealCoordinate getRealOrigin() const;
             RealCoordinate getRealSize() const;
 
             Real getGridConstant() const;
 
-            PixelCoordinate getPixelOrigin() const;
-            RealCoordinate getRealOrigin() const;
-            void setOrigin(const PixelCoordinate& o);
-            void setOrigin(const RealCoordinate& o);
+            void setOrigin(const PixelCoordinate& origin);
+            void setOrigin(const RealCoordinate& origin);
 
-            PixelCoordinate getMinPixelCoordinates() const;
-            PixelCoordinate getMaxPixelCoordinates() const;
-            RealCoordinate getMinRealCoordinates() const;
-            RealCoordinate getMaxRealCoordinates() const;
+            T& at(const RealCoordinate& coordinate);
+            T& at(const PixelCoordinate& coordinate);
 
-            T& at(const RealCoordinate& c);
-            T& at(const PixelCoordinate& c);
-            T& operator [](const PixelCoordinate& c);
-            T& operator [](const RealCoordinate& c);
+            T& operator [](const PixelCoordinate& coordinate);
+            T& operator [](const RealCoordinate& coordinate);
     };
 }
 
