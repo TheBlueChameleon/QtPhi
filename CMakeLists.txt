@@ -142,11 +142,12 @@ endif()
 
 add_executable(unittest
     unittest/unittest_main.cpp
-    unittest/base/test_test.h unittest/base/test_test.cpp
-    unittest/base/test_bar.h unittest/base/test_bar.cpp
+    unittest/base/coordinatetest.h unittest/base/coordinatetest.cpp
 )
 
 target_link_libraries(unittest PRIVATE
+    Phi-base
+
     Qt6::Core
     Qt6::Gui
     Qt6::Test
