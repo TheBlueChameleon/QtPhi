@@ -72,8 +72,12 @@ set(UI_SOURCES
 # ============================================================================ #
 # QT components
 
-find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Widgets)
-find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets)
+find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS
+    Widgets Test
+)
+find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS
+    Widgets Test
+)
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
     qt_add_executable(QtPhi
@@ -97,9 +101,6 @@ else()
         )
     endif()
 endif()
-
-# ============================================================================ #
-# unit test framework
 
 # ============================================================================ #
 # linker setup
@@ -134,3 +135,20 @@ install(TARGETS QtPhi
 if(QT_VERSION_MAJOR EQUAL 6)
     qt_finalize_executable(QtPhi)
 endif()
+
+
+# ============================================================================ #
+# unit test framework
+
+add_executable(unittest
+    unittest/unittest_main.cpp
+    unittest/base/test_test.h unittest/base/test_test.cpp
+    unittest/base/test_bar.h unittest/base/test_bar.cpp
+)
+
+target_link_libraries(unittest PRIVATE
+    Qt6::Core
+    Qt6::Gui
+    Qt6::Test
+    Qt6::Widgets
+)
