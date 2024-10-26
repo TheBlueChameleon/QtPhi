@@ -2,7 +2,7 @@
 #define RECT_H
 
 #include "base/concepts.h"
-#include "base/coordinates/coordinate.h"
+#include "base/geometry/coordinate.h"
 
 namespace Base
 {

@@ -1,7 +1,7 @@
 #include <iostream>
 
 #include "coordinatetest.h"
-#include "base/coordinates/coordinate.h"
+#include "base/geometry/coordinate.h"
 
 using namespace Base;
 

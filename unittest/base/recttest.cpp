@@ -1,6 +1,6 @@
 #include "recttest.h"
 
-#include "base/coordinates/rect.h"
+#include "base/geometry/rect.h"
 #include "base/errors.h"
 
 using namespace Base;

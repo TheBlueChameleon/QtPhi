@@ -42,10 +42,10 @@ add_library(Phi-base STATIC
     src/base/base.h
     src/base/concepts.h
     src/base/errors.h src/base/errors.cpp
-    src/base/coordinates/coordinate.h   src/base/coordinates/coordinate.txx src/base/coordinates/coordinate.cpp
-    src/base/coordinates/rect.h         src/base/coordinates/rect.txx       src/base/coordinates/rect.cpp
-    src/base/coordinates/grid.h
-    src/base/coordinates/basegrid.h     src/base/coordinates/basegrid.txx   src/base/coordinates/basegrid.cpp
+    src/base/geometry/coordinate.h src/base/geometry/coordinate.txx src/base/geometry/coordinate.cpp
+    src/base/geometry/rect.h src/base/geometry/rect.txx src/base/geometry/rect.cpp
+    src/base/geometry/grid.h
+    src/base/geometry/basegrid.h src/base/geometry/basegrid.txx src/base/geometry/basegrid.cpp
 )
 
 # ............................................................................ #
