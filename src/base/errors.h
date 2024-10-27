@@ -14,6 +14,7 @@ namespace Base
             PhiError(const std::string& message);
     };
 
+    DEF_ERROR(IllegalStateError);
     DEF_ERROR(AccessRightsError);
     DEF_ERROR(KeyError);
     DEF_ERROR(MemoryManagementError);

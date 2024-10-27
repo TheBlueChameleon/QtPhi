@@ -1,6 +1,7 @@
 #ifndef BASEGRID_H
 #define BASEGRID_H
 
+#include <optional>
 #include <vector>
 
 #include "base/geometry/rect.h"
@@ -18,9 +19,8 @@ namespace Base
         public:
             BaseGrid(const PixelRect& dimensions, const Real gridConstant);
 
-            // Grid interface
-            PixelRect getPixelDimensions() const;
-            RealRect  getRealDimensions() const;
+            const PixelRect& getPixelDimensions() const;
+            RealRect         getRealDimensions() const;
 
             PixelCoordinate getPixelOrigin() const;
             PixelCoordinate getPixelSize() const;
@@ -39,7 +39,13 @@ namespace Base
             T& operator [](const PixelCoordinate& coordinate);
             T& operator [](const RealCoordinate& coordinate);
 
-            std::vector<T>& exposeValues();
+            const T& get(const PixelCoordinate& coordinate) const;
+            const T& get(const RealCoordinate& coordinate) const;
+
+            const std::vector<T>& exposeValues() const;
+
+        private:
+            Pixel getIndexFromPixelCoordinate(const PixelCoordinate& coordinate) const;
     };
 }
 

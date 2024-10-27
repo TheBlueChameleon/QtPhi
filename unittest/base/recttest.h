@@ -12,6 +12,7 @@ class RectTest: public QObject
         void ctor();
         void getMinMaxSize();
         void contains();
+        void iterator();
 };
 
 #endif // RECTTEST_H

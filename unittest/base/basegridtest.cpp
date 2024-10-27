@@ -36,13 +36,9 @@ void BaseGridTest::dataAccess()
     auto grid = BaseGrid<Real>(dimension, 1.0);
 
     Real v = 0;
-    for (Pixel y = dimension.getMin().y; y <= dimension.getMax().y; ++y)
+    for (const auto& c: grid.getPixelDimensions())
     {
-        for (Pixel x = dimension.getMin().x; x <= dimension.getMax().x; ++x)
-        {
-            const auto c = PixelCoordinate(x, y);
-            grid[c] = v++;
-        }
+        grid[c] = v++;
     }
 
     auto expected = std::vector<Real>(dimension.w * dimension.h);

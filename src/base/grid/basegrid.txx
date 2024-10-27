@@ -20,7 +20,7 @@ namespace Base
     }
 
     template<ScalarOrVector T>
-    PixelRect BaseGrid<T>::getPixelDimensions() const
+    const PixelRect& BaseGrid<T>::getPixelDimensions() const
     {
         return dimensions;
     }
@@ -95,11 +95,16 @@ namespace Base
     }
 
     template<ScalarOrVector T>
-    T& BaseGrid<T>::operator [](const PixelCoordinate& coordinate)
+    Pixel BaseGrid<T>::getIndexFromPixelCoordinate(const PixelCoordinate& coordinate) const
     {
         const auto shiftedByOrigin = coordinate - dimensions.getMin();
-        const Pixel index = shiftedByOrigin.y * dimensions.w + shiftedByOrigin.x;
-        return values[index];
+        return shiftedByOrigin.y * dimensions.w + shiftedByOrigin.x;
+    }
+
+    template<ScalarOrVector T>
+    T& BaseGrid<T>::operator [](const PixelCoordinate& coordinate)
+    {
+        return values[getIndexFromPixelCoordinate(coordinate)];
     }
 
     template<ScalarOrVector T>
@@ -110,7 +115,19 @@ namespace Base
     }
 
     template<ScalarOrVector T>
-    std::vector<T>& BaseGrid<T>::exposeValues()
+    const T& BaseGrid<T>::get(const PixelCoordinate& coordinate) const
+    {
+        return values[getIndexFromPixelCoordinate(coordinate)];
+    }
+
+    template<ScalarOrVector T>
+    const T& BaseGrid<T>::get(const RealCoordinate& coordinate) const
+    {
+        return get(coordinate.toPixelCoordinate(gridConstant));
+    }
+
+    template<ScalarOrVector T>
+    const std::vector<T>& BaseGrid<T>::exposeValues() const
     {
         return values;
     }

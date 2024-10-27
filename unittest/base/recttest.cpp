@@ -95,3 +95,16 @@ void RectTest::contains()
     QVERIFY(r.contains(RealCoordinate(1,2)));
     QVERIFY(!r.contains(RealCoordinate(-1,-1)));
 }
+
+void RectTest::iterator()
+{
+    const auto p = Rect(-1, -2, 3, 4);
+    int count = 0;
+
+    for (const auto& c: p)
+    {
+        ++count;
+    }
+
+    QCOMPARE(count, p.w * p.h);
+}
