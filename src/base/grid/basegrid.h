@@ -4,7 +4,7 @@
 #include <vector>
 
 #include "grid.h"
-#include "rect.h"
+#include "base/geometry/rect.h"
 
 namespace Base
 {

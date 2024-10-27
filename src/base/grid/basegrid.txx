@@ -3,7 +3,7 @@
 
 #include "base/errors.h"
 #include "basegrid.h"
-#include "coordinate.h"
+#include "base/geometry/coordinate.h"
 
 namespace Base
 {

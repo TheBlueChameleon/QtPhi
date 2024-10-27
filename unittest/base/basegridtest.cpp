@@ -1,7 +1,7 @@
 #include "basegridtest.h"
 
 #include "base/errors.h"
-#include "base/geometry/basegrid.h"
+#include "base/grid/basegrid.h"
 #include <iostream>
 
 using namespace Base;

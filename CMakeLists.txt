@@ -44,9 +44,9 @@ add_library(Phi-base STATIC
     src/base/errors.h src/base/errors.cpp
     src/base/geometry/coordinate.h src/base/geometry/coordinate.txx src/base/geometry/coordinate.cpp
     src/base/geometry/rect.h src/base/geometry/rect.txx src/base/geometry/rect.cpp
-    src/base/geometry/grid.h
-    src/base/geometry/basegrid.h src/base/geometry/basegrid.txx src/base/geometry/basegrid.cpp
-    src/base/geometry/imposablegrid.h src/base/geometry/imposablegrid.txx src/base/geometry/imposablegrid.cpp
+    src/base/grid/grid.h
+    src/base/grid/basegrid.h src/base/grid/basegrid.txx src/base/grid/basegrid.cpp
+    src/base/grid/imposablegrid.h src/base/grid/imposablegrid.txx src/base/grid/imposablegrid.cpp
 )
 
 if (ENABLE_AVX)

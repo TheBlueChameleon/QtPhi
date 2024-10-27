@@ -2,7 +2,7 @@
 #define GRID_H
 
 #include "base/concepts.h"
-#include "coordinate.h"
+#include "base/geometry/coordinate.h"
 
 namespace Base
 {

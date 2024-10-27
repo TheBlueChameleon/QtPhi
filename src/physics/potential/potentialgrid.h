@@ -1,7 +1,7 @@
 #ifndef POTENTIALGRID_H
 #define POTENTIALGRID_H
 
-#include "base/geometry/basegrid.h"
+#include "base/grid/basegrid.h"
 
 namespace Physics
 {
