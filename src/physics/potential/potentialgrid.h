@@ -20,10 +20,10 @@ namespace Physics
             std::string to_string() const;
 
         private:
-#ifdef NO_AVX_ACCELERATION
-            void imposeImpl_noAcceleration(const PotentialGrid& targetPotential, const Base::PixelCoordinate& minIdxs, const Base::PixelCoordinate& maxIdxs, const Base::PixelCoordinate& startIdxs);
-#else
+#ifdef ENABLE_AVX
             void imposeImpl_avxAccelerated(const PotentialGrid& targetPotential, const Base::PixelCoordinate& minIdxs, const Base::PixelCoordinate& maxIdxs, const Base::PixelCoordinate& startIdxs);
+#else
+            void imposeImpl_noAcceleration(const PotentialGrid& targetPotential, const Base::PixelCoordinate& minIdxs, const Base::PixelCoordinate& maxIdxs, const Base::PixelCoordinate& startIdxs);
 #endif
     };
 }

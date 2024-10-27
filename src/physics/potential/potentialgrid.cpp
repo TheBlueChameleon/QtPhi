@@ -53,10 +53,10 @@ namespace Physics
         PixelCoordinate maxIdxs = getMaximumImposeIndices(targetPotential, at);
         PixelCoordinate startIdxs = getPixelOrigin() + at - targetPotential.getPixelOrigin() + minIdxs;
 
-#ifdef NO_AVX_ACCELERATION
-        imposeImpl_noAcceleration(targetPotential, minIdxs, maxIdxs, startIdxs);
-#else
+#ifdef ENABLE_AVX
         imposeImpl_avxAccelerated(potential, minIdxs, maxIdxs, startIdxs);
+#else
+        imposeImpl_noAcceleration(targetPotential, minIdxs, maxIdxs, startIdxs);
 #endif
     }
 
@@ -65,27 +65,7 @@ namespace Physics
         return y * w + x;
     }
 
-#ifdef NO_AVX_ACCELERATION
-    void PotentialGrid::imposeImpl_noAcceleration(const PotentialGrid& targetPotential, const PixelCoordinate& minIdxs, const PixelCoordinate& maxIdxs, const PixelCoordinate& startIdxs)
-    {
-        const auto width = maxIdxs.x - minIdxs.x + 1;
-        const auto potBegin  = targetPotential.values.begin();
-        const auto selfBegin = this->values.begin();
-
-        for (auto y = minIdxs.y; y <= maxIdxs.y; ++y)
-        {
-            const auto from = to_index(minIdxs.x, y, targetPotential.getPixelSize().x);
-            const auto till = from + width;
-            const auto to   = to_index(startIdxs.x, startIdxs.y + y - minIdxs.y, getPixelSize().x);
-
-            std::transform(potBegin + from, potBegin + till,
-                           selfBegin + to,
-                           selfBegin + to,
-                           std::plus<> {}
-                          );
-        }
-    }
-#else
+#ifdef ENABLE_AVX
     void PotentialGrid::imposeImpl_avxAccelerated(const PotentialGrid& targetPotential, const PixelCoordinate& minIdxs, const PixelCoordinate& maxIdxs, const PixelCoordinate& startIdxs)
     {
         const auto width = maxIdxs.x - minIdxs.x + 1;
@@ -128,6 +108,26 @@ namespace Physics
             mask = 0b11111111;
         }
 
+    }
+#else
+    void PotentialGrid::imposeImpl_noAcceleration(const PotentialGrid& targetPotential, const PixelCoordinate& minIdxs, const PixelCoordinate& maxIdxs, const PixelCoordinate& startIdxs)
+    {
+        const auto width = maxIdxs.x - minIdxs.x + 1;
+        const auto potBegin  = targetPotential.values.begin();
+        const auto selfBegin = this->values.begin();
+
+        for (auto y = minIdxs.y; y <= maxIdxs.y; ++y)
+        {
+            const auto from = to_index(minIdxs.x, y, targetPotential.getPixelSize().x);
+            const auto till = from + width;
+            const auto to   = to_index(startIdxs.x, startIdxs.y + y - minIdxs.y, getPixelSize().x);
+
+            std::transform(potBegin + from, potBegin + till,
+                           selfBegin + to,
+                           selfBegin + to,
+                           std::plus<> {}
+                          );
+        }
     }
 #endif
 

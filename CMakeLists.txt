@@ -49,6 +49,10 @@ add_library(Phi-base STATIC
     src/base/geometry/imposablegrid.h src/base/geometry/imposablegrid.txx src/base/geometry/imposablegrid.cpp
 )
 
+if (ENABLE_AVX)
+    target_compile_definitions(Phi-base PUBLIC ENABLE_AVX)
+endif()
+
 # ............................................................................ #
 # physics
 
@@ -58,8 +62,8 @@ add_library(Phi-physics STATIC
     src/physics/potential/potentialgrid.h src/physics/potential/potentialgrid.cpp
 )
 
-if (NOT ENABLE_AVX)
-    target_compile_definitions(Phi-physics PUBLIC NO_AVX_ACCELERATION)
+if (ENABLE_AVX)
+    target_compile_definitions(Phi-physics PUBLIC ENABLE_AVX)
 endif()
 
 # ............................................................................ #

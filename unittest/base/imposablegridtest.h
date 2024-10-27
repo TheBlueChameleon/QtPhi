@@ -10,6 +10,7 @@ class ImposableGridTest : public QObject
 
     private slots:
         void clipping();
+        void impose();
 };
 
 #endif // IMPOSABLEGRIDTEST_H

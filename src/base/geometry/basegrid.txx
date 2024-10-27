@@ -97,7 +97,7 @@ namespace Base
     template<ScalarOrVector T>
     T& BaseGrid<T>::operator [](const PixelCoordinate& coordinate)
     {
-        const auto shiftedByOrigin = coordinate + dimensions.getMin();
+        const auto shiftedByOrigin = coordinate - dimensions.getMin();
         const Pixel index = shiftedByOrigin.y * dimensions.w + shiftedByOrigin.x;
         return values[index];
     }
@@ -107,6 +107,12 @@ namespace Base
     {
         PixelCoordinate pixelCoordinate = coordinate.toPixelCoordinate(gridConstant);
         return (*this)[pixelCoordinate];
+    }
+
+    template<ScalarOrVector T>
+    std::vector<T>& BaseGrid<T>::exposeValues()
+    {
+        return values;
     }
 }
 

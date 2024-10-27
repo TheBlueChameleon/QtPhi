@@ -39,6 +39,8 @@ namespace Base
 
             T& operator [](const PixelCoordinate& coordinate);
             T& operator [](const RealCoordinate& coordinate);
+
+            std::vector<T>& exposeValues();
     };
 }
 

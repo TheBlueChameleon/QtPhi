@@ -10,7 +10,8 @@ class BaseGridTest : public QObject
 
     private slots:
         void ctor();
-        void getters();
+        void getDimensionData();
+        void dataAccess();
 };
 
 #endif // BASEGRIDTEST_H
