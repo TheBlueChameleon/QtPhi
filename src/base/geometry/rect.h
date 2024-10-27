@@ -20,10 +20,16 @@ namespace Base
 
         Coordinate<T> getMin() const;
         Coordinate<T> getMax() const;
+        Coordinate<T> getSize() const;
 
         bool contains(Coordinate<T> p) const;
 
+        PixelRect toPixelRect(const Real gridConstant) const;
+        RealRect  toRealRect(const Real gridConstant) const;
+
         bool operator==(const Rect<T>& rhs) const = default;
+
+        std::string to_string() const;
     };
 }
 #endif // RECT_H

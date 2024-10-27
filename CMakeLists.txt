@@ -19,7 +19,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 # AVX
 
 # set this to NO if your target does not support AVX CPU instructions
-set (ENABLE_AVX YES)
+set (ENABLE_AVX NO)
 
 if (ENABLE_AVX)
     set (CMAKE_CXX_FLAGS "-mavx512f")
@@ -46,6 +46,7 @@ add_library(Phi-base STATIC
     src/base/geometry/rect.h src/base/geometry/rect.txx src/base/geometry/rect.cpp
     src/base/geometry/grid.h
     src/base/geometry/basegrid.h src/base/geometry/basegrid.txx src/base/geometry/basegrid.cpp
+    src/base/geometry/imposablegrid.h src/base/geometry/imposablegrid.txx src/base/geometry/imposablegrid.cpp
 )
 
 # ............................................................................ #
@@ -144,6 +145,8 @@ add_executable(unittest
     unittest/unittest_main.cpp
     unittest/base/coordinatetest.h unittest/base/coordinatetest.cpp
     unittest/base/recttest.h unittest/base/recttest.cpp
+    unittest/base/basegridtest.h unittest/base/basegridtest.cpp
+    unittest/base/imposablegridtest.h unittest/base/imposablegridtest.cpp
 )
 
 target_link_libraries(unittest PRIVATE

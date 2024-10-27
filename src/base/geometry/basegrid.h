@@ -8,7 +8,7 @@
 
 namespace Base
 {
-    template<EitherScalarOrVector T>
+    template<ScalarOrVector T>
     class BaseGrid : public Grid<T>
     {
         protected:

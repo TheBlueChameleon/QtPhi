@@ -6,7 +6,7 @@
 
 namespace Base
 {
-    template<EitherScalarOrVector T>
+    template<ScalarOrVector T>
     struct Grid
     {
         virtual PixelRect getPixelDimensions() const = 0;

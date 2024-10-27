@@ -10,7 +10,7 @@ class RectTest: public QObject
 
     private slots:
         void ctor();
-        void getMinMax();
+        void getMinMaxSize();
         void contains();
 };
 

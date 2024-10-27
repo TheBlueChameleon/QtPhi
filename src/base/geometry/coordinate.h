@@ -22,8 +22,8 @@ namespace Base
         Coordinate<T> operator/(const Real rhs) const;
         bool operator==(const Coordinate<T>& rhs) const = default;
 
-        PixelCoordinate toPixelCoordinate(Real gridConstant) const;
-        RealCoordinate  toRealCoordinate(Real gridConstant) const;
+        PixelCoordinate toPixelCoordinate(const Real gridConstant) const;
+        RealCoordinate  toRealCoordinate(const Real gridConstant) const;
 
         std::string to_string() const;
 

@@ -1,6 +1,8 @@
 #include <QTest>
 
+#include "base/basegridtest.h"
 #include "base/coordinatetest.h"
+#include "base/imposablegridtest.h"
 #include "base/recttest.h"
 
 int main(int argc, char* argv[])
@@ -15,6 +17,8 @@ int main(int argc, char* argv[])
     // run suite
     runTest(new CoordinateTest);
     runTest(new RectTest);
+    runTest(new BaseGridTest);
+    runTest(new ImposableGridTest);
 
     return status;
 }

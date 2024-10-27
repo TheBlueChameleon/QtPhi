@@ -11,6 +11,7 @@ class CoordinateTest : public QObject
     private slots:
         void add_sub_neg();
         void mul_div();
+        void gridConstant();
 };
 
 #endif // COORDINATETEST_H

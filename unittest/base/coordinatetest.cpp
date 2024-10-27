@@ -1,5 +1,3 @@
-#include <iostream>
-
 #include "coordinatetest.h"
 #include "base/geometry/coordinate.h"
 
@@ -28,6 +26,20 @@ void CoordinateTest::mul_div()
 
     QVERIFY(mul == RealCoordinate(3, 5));
     QVERIFY(mul == div);
+}
+
+void CoordinateTest::gridConstant()
+{
+    PixelCoordinate p {1, 2};
+    RealCoordinate  q {2.0, 4.0};
+
+    // real transformation
+    QCOMPARE(p.toRealCoordinate(2.0), q);
+    QCOMPARE(q.toPixelCoordinate(2.0), p);
+
+    // identity transformation
+    QCOMPARE(p.toPixelCoordinate(2.0), p);
+    QCOMPARE(q.toRealCoordinate(2.0), q);
 }
 
 

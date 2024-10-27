@@ -25,7 +25,7 @@ namespace Base
     using Vector = RealCoordinate;
 
     template<typename T>
-    concept EitherScalarOrVector = Base::EitherOr<T, Scalar, Vector>;
+    concept ScalarOrVector = Base::EitherOr<T, Scalar, Vector>;
 
     using PixelCoordinatePair = std::pair<PixelCoordinate, PixelCoordinate>;
     using RealCoordinatePair = std::pair<RealCoordinate, RealCoordinate>;

@@ -10,8 +10,8 @@ void RectTest::ctor()
     const auto p = Rect<Pixel>();
     QCOMPARE(p.x, 0);
     QCOMPARE(p.y, 0);
-    QCOMPARE(p.w, 0);
-    QCOMPARE(p.h, 0);
+    QCOMPARE(p.w, 1);
+    QCOMPARE(p.h, 1);
 
     const auto q = Rect(1,2,3,4);
     QCOMPARE(q.x, 1);
@@ -22,8 +22,8 @@ void RectTest::ctor()
     const auto r = Rect<Real>();
     QCOMPARE(r.x, 0.0);
     QCOMPARE(r.y, 0.0);
-    QCOMPARE(r.w, 0.0);
-    QCOMPARE(r.h, 0.0);
+    QCOMPARE(r.w, 1.0);
+    QCOMPARE(r.h, 1.0);
 
     const auto s = Rect(1.,2.,3.,4.);
     QCOMPARE(s.x, 1.0);
@@ -33,12 +33,17 @@ void RectTest::ctor()
 
     QVERIFY_THROWS_EXCEPTION(
         DimensionError,
-        Rect(0, 0, -1, 0)
+        Rect(0, 0, 0, 0)
     );
 
     QVERIFY_THROWS_EXCEPTION(
         DimensionError,
-        Rect(0, 0, 0, -1)
+        Rect(0, 0, -1, 1)
+    );
+
+    QVERIFY_THROWS_EXCEPTION(
+        DimensionError,
+        Rect(0, 0, 1, -1)
     );
 
     Base::PixelCoordinatePair pp1(PixelCoordinate(0, 0), PixelCoordinate(1, 1));
@@ -60,16 +65,17 @@ void RectTest::ctor()
     QCOMPARE(rr1, rr2);
 }
 
-void RectTest::getMinMax()
+void RectTest::getMinMaxSize()
 {
     const auto p = Rect(0, 0, 1, 2);
     QCOMPARE(p.getMin(), PixelCoordinate(0, 0));
     QCOMPARE(p.getMax(), PixelCoordinate(0, 1));
-
+    QCOMPARE(p.getSize(), PixelCoordinate(1, 2));
 
     const auto r = Rect(0.0, 0.0, 1.0, 2.0);
     QCOMPARE(r.getMin(), RealCoordinate(0, 0));
     QCOMPARE(r.getMax(), RealCoordinate(1, 2));
+    QCOMPARE(r.getSize(), RealCoordinate(1, 2));
 }
 
 void RectTest::contains()

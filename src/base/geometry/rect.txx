@@ -10,7 +10,7 @@ namespace Base
     template<PixelOrReal T>
     void assertPositiveExtent(const Rect<T>& r)
     {
-        if (r.w < 0 || r.h < 0)
+        if (r.w <= 0 || r.h <= 0)
         {
             const std::string errMsg = std::format("Negative dimensions encountered: w={}, h={}", r.w, r.h);
             throw DimensionError(errMsg);
@@ -67,6 +67,12 @@ namespace Base
     }
 
     template<PixelOrReal T>
+    Coordinate<T> Rect<T>::getSize() const
+    {
+        return Coordinate<T>(w, h);
+    }
+
+    template<PixelOrReal T>
     bool Rect<T>::contains(Coordinate<T> p) const
     {
         bool result = true;
@@ -78,5 +84,11 @@ namespace Base
         result &= (p.y <= q.y);
 
         return result;
+    }
+
+    template<PixelOrReal T>
+    std::string Rect<T>::to_string() const
+    {
+        return std::format("Rect ({}, {}) x ({}, {})", this->x, this->y, this->w, this->h);
     }
 }

@@ -11,13 +11,13 @@ namespace Physics
         BaseGrid<Scalar>(PixelRect(), 1.0)
     {}
 
-    PotentialGrid::PotentialGrid(const PixelRect &dimensions, Base::Real gridConstant, Base::Real level):
+    PotentialGrid::PotentialGrid(const PixelRect& dimensions, Base::Real gridConstant, Base::Real level):
         BaseGrid<Scalar>(dimensions, gridConstant)
     {
         std::fill(values.begin(), values.end(), level);
     }
 
-    template<Base::EitherScalarOrVector T>
+    template<Base::ScalarOrVector T>
     T negativeReLU(T x)
     {
         return x >= 0 ? 0 : - x;
@@ -25,36 +25,36 @@ namespace Physics
 
     constexpr PixelCoordinate offByOne = {1,1};
 
-    PixelCoordinate PotentialGrid::getMinimumImposeIndices(const PotentialGrid& potential, const PixelCoordinate at) const
+    PixelCoordinate PotentialGrid::getMinimumImposeIndices(const PotentialGrid& targetPotential, const PixelCoordinate at) const
     {
-        PixelCoordinate minPos = at - (potential.getPixelSize() - potential.getPixelOrigin() + this->getPixelOrigin()) + offByOne;
+        PixelCoordinate minPos = at - (targetPotential.getPixelSize() - targetPotential.getPixelOrigin() + this->getPixelOrigin()) + offByOne;
         return {negativeReLU(minPos.x), negativeReLU(minPos.y)};
     }
 
-    PixelCoordinate PotentialGrid::getMaximumImposeIndices(const PotentialGrid& potential, const PixelCoordinate at) const
+    PixelCoordinate PotentialGrid::getMaximumImposeIndices(const PotentialGrid& targetPotential, const PixelCoordinate at) const
     {
-        PixelCoordinate maxPos = at + potential.getPixelDimensions().getMax() + this->getPixelOrigin() - offByOne;
+        PixelCoordinate maxPos = at + targetPotential.getPixelDimensions().getMax() + this->getPixelOrigin() - offByOne;
         PixelCoordinate clippedPos = PixelCoordinate::min(maxPos, this->getPixelDimensions().getMax() - offByOne);
         PixelCoordinate deltaClipping = maxPos - clippedPos;
-        PixelCoordinate existingPos = potential.getPixelSize() - deltaClipping - offByOne;
+        PixelCoordinate existingPos = targetPotential.getPixelSize() - deltaClipping - offByOne;
 
         return existingPos;
     }
 
-    void PotentialGrid::imposeAt(const PotentialGrid& potential, const RealCoordinate at)
+    void PotentialGrid::imposeAt(const PotentialGrid& targetPotential, const RealCoordinate at)
     {
-        const PixelCoordinate pc = at.toPixelCoordinate(gridConstant);
-        imposeAt(potential, pc);
+        const PixelCoordinate pixelAt = at.toPixelCoordinate(gridConstant);
+        imposeAt(targetPotential, pixelAt);
     }
 
-    void PotentialGrid::imposeAt(const PotentialGrid& potential, const PixelCoordinate at)
+    void PotentialGrid::imposeAt(const PotentialGrid& targetPotential, const PixelCoordinate at)
     {
-        PixelCoordinate minIdxs = getMinimumImposeIndices(potential, at);
-        PixelCoordinate maxIdxs = getMaximumImposeIndices(potential, at);
-        PixelCoordinate startIdxs = getPixelOrigin() + at - potential.getPixelOrigin() + minIdxs;
+        PixelCoordinate minIdxs = getMinimumImposeIndices(targetPotential, at);
+        PixelCoordinate maxIdxs = getMaximumImposeIndices(targetPotential, at);
+        PixelCoordinate startIdxs = getPixelOrigin() + at - targetPotential.getPixelOrigin() + minIdxs;
 
 #ifdef NO_AVX_ACCELERATION
-        imposeImpl_noAcceleration(potential, minIdxs, maxIdxs, startIdxs);
+        imposeImpl_noAcceleration(targetPotential, minIdxs, maxIdxs, startIdxs);
 #else
         imposeImpl_avxAccelerated(potential, minIdxs, maxIdxs, startIdxs);
 #endif
