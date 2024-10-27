@@ -44,7 +44,6 @@ add_library(Phi-base STATIC
     src/base/errors.h src/base/errors.cpp
     src/base/geometry/coordinate.h src/base/geometry/coordinate.txx src/base/geometry/coordinate.cpp
     src/base/geometry/rect.h src/base/geometry/rect.txx src/base/geometry/rect.cpp
-    src/base/grid/grid.h
     src/base/grid/basegrid.h src/base/grid/basegrid.txx src/base/grid/basegrid.cpp
     src/base/grid/imposablegrid.h src/base/grid/imposablegrid.txx src/base/grid/imposablegrid.cpp
 )

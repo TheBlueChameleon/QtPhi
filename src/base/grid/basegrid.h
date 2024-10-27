@@ -3,13 +3,12 @@
 
 #include <vector>
 
-#include "grid.h"
 #include "base/geometry/rect.h"
 
 namespace Base
 {
     template<ScalarOrVector T>
-    class BaseGrid : public Grid<T>
+    class BaseGrid
     {
         protected:
             PixelRect       dimensions;

@@ -19,7 +19,7 @@ namespace Base
     }
 
     template<ScalarOrVector T>
-    ImposableGrid<T>::ImposeInfo ImposableGrid<T>::getImposeInfo(const Grid<T>& targetGrid, const PixelCoordinate& at) const
+    ImposableGrid<T>::ImposeInfo ImposableGrid<T>::getImposeInfo(const BaseGrid<T>& targetGrid, const PixelCoordinate& at) const
     {
         const auto targetDimensions = targetGrid.getPixelDimensions();
 
@@ -40,13 +40,13 @@ namespace Base
     }
 
     template<ScalarOrVector T>
-    ImposableGrid<T>::ImposeInfo ImposableGrid<T>::getImposeInfo(const Grid<T>& targetGrid, const RealCoordinate& at) const
+    ImposableGrid<T>::ImposeInfo ImposableGrid<T>::getImposeInfo(const BaseGrid<T>& targetGrid, const RealCoordinate& at) const
     {
         return getImposeInfo(targetGrid, at.toPixelCoordinate(this->gridConstant));
     }
 
     template<ScalarOrVector T>
-    PixelRect ImposableGrid<T>::getSrcRect(const Grid<T>& targetGrid, const PixelCoordinate& at) const
+    PixelRect ImposableGrid<T>::getSrcRect(const BaseGrid<T>& targetGrid, const PixelCoordinate& at) const
     {
         const auto targetDimensions = targetGrid.getPixelDimensions();
 
@@ -64,13 +64,13 @@ namespace Base
     }
 
     template<ScalarOrVector T>
-    PixelRect ImposableGrid<T>::getSrcRect(const Grid<T>& targetGrid, const RealCoordinate& at) const
+    PixelRect ImposableGrid<T>::getSrcRect(const BaseGrid<T>& targetGrid, const RealCoordinate& at) const
     {
         return getSrcRect(targetGrid, at.toPixelCoordinate(this->gridConstant));
     }
 
     template<ScalarOrVector T>
-    PixelCoordinate ImposableGrid<T>::getDstStart(const Grid<T>& targetGrid, const PixelCoordinate& at) const
+    PixelCoordinate ImposableGrid<T>::getDstStart(const BaseGrid<T>& targetGrid, const PixelCoordinate& at) const
     {
         const auto targetDimensions = targetGrid.getPixelDimensions();
         const auto unclipped = at + this->dimensions.getMin();
@@ -78,13 +78,13 @@ namespace Base
     }
 
     template<ScalarOrVector T>
-    PixelCoordinate ImposableGrid<T>::getDstStart(const Grid<T>& targetGrid, const RealCoordinate& at) const
+    PixelCoordinate ImposableGrid<T>::getDstStart(const BaseGrid<T>& targetGrid, const RealCoordinate& at) const
     {
         return getDstStart(targetGrid, at.toPixelCoordinate(this->gridConstant));
     }
 
     template<ScalarOrVector T>
-    void ImposableGrid<T>::impose(Grid<T> &targetGrid, const RealCoordinate at) const
+    void ImposableGrid<T>::impose(BaseGrid<T>& targetGrid, const RealCoordinate at) const
     {
         impose(targetGrid, at.toPixelCoordinate(this->gridConstant));
     }

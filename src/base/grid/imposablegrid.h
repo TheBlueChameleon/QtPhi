@@ -14,17 +14,17 @@ namespace Base
         public:
             ImposableGrid(const PixelRect& dimensions, const Real gridConstant);
 
-            ImposeInfo getImposeInfo(const Grid<T>& targetGrid, const PixelCoordinate& at) const;
-            ImposeInfo getImposeInfo(const Grid<T>& targetGrid, const RealCoordinate& at) const;
+            ImposeInfo getImposeInfo(const BaseGrid<T>& targetGrid, const PixelCoordinate& at) const;
+            ImposeInfo getImposeInfo(const BaseGrid<T>& targetGrid, const RealCoordinate& at) const;
 
-            PixelRect getSrcRect(const Grid<T>& targetGrid, const PixelCoordinate& at) const;
-            PixelRect getSrcRect(const Grid<T>& targetGrid, const RealCoordinate& at) const;
+            PixelRect getSrcRect(const BaseGrid<T>& targetGrid, const PixelCoordinate& at) const;
+            PixelRect getSrcRect(const BaseGrid<T>& targetGrid, const RealCoordinate& at) const;
 
-            PixelCoordinate getDstStart(const Grid<T>& targetGrid, const PixelCoordinate& at) const;
-            PixelCoordinate getDstStart(const Grid<T>& targetGrid, const RealCoordinate& at) const;
+            PixelCoordinate getDstStart(const BaseGrid<T>& targetGrid, const PixelCoordinate& at) const;
+            PixelCoordinate getDstStart(const BaseGrid<T>& targetGrid, const RealCoordinate& at) const;
 
-            void impose(Grid<T>& targetGrid, const PixelCoordinate at) const;
-            void impose(Grid<T>& targetGrid, const RealCoordinate  at) const;
+            void impose(BaseGrid<T>& targetGrid, const PixelCoordinate at) const;
+            void impose(BaseGrid<T>& targetGrid, const RealCoordinate  at) const;
     };
 }
 

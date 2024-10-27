@@ -7,7 +7,7 @@ namespace Base
     template struct ImposableGrid<Vector>;
 
     template<>
-    void ImposableGrid<Real>::impose(Grid<Real>& targetGrid, const PixelCoordinate at) const
+    void ImposableGrid<Real>::impose(BaseGrid<Real>& targetGrid, const PixelCoordinate at) const
     {
         std::cout << "### IMPOSE ON SCALAR GRID" << std::endl;
 
@@ -36,7 +36,7 @@ namespace Base
     }
 
     template<>
-    void ImposableGrid<Vector>::impose(Grid<Vector>& targetGrid, const PixelCoordinate at) const
+    void ImposableGrid<Vector>::impose(BaseGrid<Vector>& targetGrid, const PixelCoordinate at) const
     {
         std::cout << "### IMPOSE ON VECTOR GRID" << std::endl;
     }
