@@ -5,13 +5,27 @@ namespace Base
     template struct Coordinate<Pixel>;
     template struct Coordinate<Real>;
 
-    PixelCoordinate toPixelCoordinate(const RealCoordinate& c, Real gridConstant)
+    template<>
+    PixelCoordinate Coordinate<Pixel>::toPixelCoordinate(Real gridConstant) const
     {
-        return PixelCoordinate {Pixel(c.x / gridConstant), Pixel(c.y / gridConstant)};
+        return *this;
     }
 
-    RealCoordinate toRealCoordinate(const PixelCoordinate& c, Real gridConstant)
+    template<>
+    PixelCoordinate Coordinate<Real>::toPixelCoordinate(Real gridConstant) const
     {
-        return RealCoordinate {c.x * gridConstant, c.y * gridConstant};
+        return PixelCoordinate {Pixel(this->x / gridConstant), Pixel(this->y / gridConstant)};
+    }
+
+    template<>
+    RealCoordinate Coordinate<Pixel>::toRealCoordinate(Real gridConstant) const
+    {
+        return RealCoordinate {this->x * gridConstant, this->y * gridConstant};
+    }
+
+    template<>
+    RealCoordinate Coordinate<Real>::toRealCoordinate(Real gridConstant) const
+    {
+        return *this;
     }
 }

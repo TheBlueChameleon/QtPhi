@@ -22,11 +22,14 @@ namespace Base
         Coordinate<T> operator/(const Real rhs) const;
         bool operator==(const Coordinate<T>& rhs) const = default;
 
-        std::string to_string() const;
-    };
+        PixelCoordinate toPixelCoordinate(Real gridConstant) const;
+        RealCoordinate  toRealCoordinate(Real gridConstant) const;
 
-    PixelCoordinate toPixelCoordinate(const RealCoordinate& c, Real gridConstant);
-    RealCoordinate  toRealCoordinate(const PixelCoordinate& c, Real gridConstant);
+        std::string to_string() const;
+
+        static Coordinate<T> min(const Coordinate<T>& lhs, const Coordinate<T>& rhs);
+        static Coordinate<T> max(const Coordinate<T>& lhs, const Coordinate<T>& rhs);
+    };
 }
 
 #endif // COORDINATES_H

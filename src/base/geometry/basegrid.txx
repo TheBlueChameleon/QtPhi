@@ -12,7 +12,12 @@ namespace Base
         dimensions(dimensions),
         gridConstant(gridConstant),
         values(std::vector<T>(dimensions.w * dimensions.h))
-    {}
+    {
+        if (gridConstant <= 0.0)
+        {
+            throw DimensionError("grid constant equal to or less than zero");
+        }
+    }
 
     template<EitherScalarOrVector T>
     PixelRect BaseGrid<T>::getPixelDimensions() const
@@ -41,13 +46,13 @@ namespace Base
     template<EitherScalarOrVector T>
     RealCoordinate BaseGrid<T>::getRealOrigin() const
     {
-        return toRealCoordinate(getPixelOrigin(), gridConstant);
+        return getPixelOrigin().toRealCoordinate(gridConstant);
     }
 
     template<EitherScalarOrVector T>
     RealCoordinate BaseGrid<T>::getRealSize() const
     {
-        return toRealCoordinate(getPixelSize(), gridConstant);
+        return getPixelSize().toRealCoordinate(gridConstant);
     }
 
     template<EitherScalarOrVector T>
@@ -66,13 +71,13 @@ namespace Base
     template<EitherScalarOrVector T>
     void BaseGrid<T>::setOrigin(const RealCoordinate& origin)
     {
-        setOrigin(toPixelCoordinate(origin, gridConstant));
+        setOrigin(origin.toPixelCoordinate(gridConstant));
     }
 
     template<EitherScalarOrVector T>
     T& BaseGrid<T>::at(const RealCoordinate& coordinate)
     {
-        PixelCoordinate pixelCoordinate = toPixelCoordinate(coordinate, gridConstant);
+        PixelCoordinate pixelCoordinate = coordinate.toPixelCoordinate(gridConstant);
         return at(pixelCoordinate);
     }
 
@@ -100,7 +105,7 @@ namespace Base
     template<EitherScalarOrVector T>
     T& BaseGrid<T>::operator [](const RealCoordinate& coordinate)
     {
-        PixelCoordinate pixelCoordinate = toPixelCoordinate(coordinate, gridConstant);
+        PixelCoordinate pixelCoordinate = coordinate.toPixelCoordinate(gridConstant);
         return (*this)[pixelCoordinate];
     }
 }

@@ -1,29 +1,31 @@
-// #ifndef POTENTIALGRID_H
-// #define POTENTIALGRID_H
+#ifndef POTENTIALGRID_H
+#define POTENTIALGRID_H
 
-// #include "base/coordinates/basegrid.h"
+#include "base/geometry/basegrid.h"
 
-// namespace Physics
-// {
-//     class PotentialGrid : public Base::BaseGrid<Base::Scalar>
-//     {
+namespace Physics
+{
+    class PotentialGrid : public Base::BaseGrid<Base::Scalar>
+    {
+        public:
+            PotentialGrid();
+            PotentialGrid(const Base::PixelRect& dimensions, Base::Real gridConstant, Base::Real level = 0);
 
-//         private:
-//             void imposeImpl_noAcceleration(const PotentialGrid& potential, const Base::PixelCoordinate& minIdxs, const Base::PixelCoordinate& maxIdxs, const Base::PixelCoordinate& startIdxs);
-//             void imposeImpl_avxAccelerated(const PotentialGrid& potential, const Base::PixelCoordinate& minIdxs, const Base::PixelCoordinate& maxIdxs, const Base::PixelCoordinate& startIdxs);
+            Base::PixelCoordinate getMinimumImposeIndices(const PotentialGrid& targetPotential, const Base::PixelCoordinate at) const;
+            Base::PixelCoordinate getMaximumImposeIndices(const PotentialGrid& targetPotential, const Base::PixelCoordinate at) const;
 
-//         public:
-//             PotentialGrid();
-//             PotentialGrid(Base::PixelCoordinate size, Base::Real gridConstant, Base::Real level = 0);
+            void imposeAt(const PotentialGrid& targetPotential, const Base::RealCoordinate  at);
+            void imposeAt(const PotentialGrid& targetPotential, const Base::PixelCoordinate at);
 
-//             Base::PixelCoordinate getMinimumImposeIndices(const PotentialGrid& potential, const Base::PixelCoordinate at) const;
-//             Base::PixelCoordinate getMaximumImposeIndices(const PotentialGrid& potential, const Base::PixelCoordinate at) const;
+            std::string to_string() const;
 
-//             void imposeAt(const PotentialGrid& potential, const Base::RealCoordinate  at);
-//             void imposeAt(const PotentialGrid& potential, const Base::PixelCoordinate at);
+        private:
+#ifdef NO_AVX_ACCELERATION
+            void imposeImpl_noAcceleration(const PotentialGrid& targetPotential, const Base::PixelCoordinate& minIdxs, const Base::PixelCoordinate& maxIdxs, const Base::PixelCoordinate& startIdxs);
+#else
+            void imposeImpl_avxAccelerated(const PotentialGrid& targetPotential, const Base::PixelCoordinate& minIdxs, const Base::PixelCoordinate& maxIdxs, const Base::PixelCoordinate& startIdxs);
+#endif
+    };
+}
 
-//             std::string to_string() const;
-//     };
-// }
-
-// #endif // POTENTIALGRID_H
+#endif // POTENTIALGRID_H
