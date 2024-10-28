@@ -91,4 +91,20 @@ namespace Base
     {
         return std::format("Rect ({}, {}) x ({}, {})", this->x, this->y, this->w, this->h);
     }
+
+    template<PixelOrReal T>
+    template<class Q>
+    std::enable_if<std::is_integral<Q>::value, const PixelRectIterator>::type
+    Rect<T>::begin() const
+    {
+        return PixelRectIterator(*this);
+    }
+
+    template<PixelOrReal T>
+    template<class Q>
+    std::enable_if<std::is_integral<Q>::value, const PixelRectIterator>::type
+    Rect<T>::end() const
+    {
+        return PixelRectIterator();
+    }
 }

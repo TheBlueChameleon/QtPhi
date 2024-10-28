@@ -14,6 +14,9 @@ namespace Base
     template Rect<Pixel>::Rect(const PixelCoordinatePair&);
     template Rect<Real>::Rect(const RealCoordinatePair&);
 
+    template typename std::enable_if<std::is_integral<Pixel>::value, const PixelRectIterator>::type Rect<Pixel>::begin<Pixel>() const;
+    template typename std::enable_if<std::is_integral<Pixel>::value, const PixelRectIterator>::type Rect<Pixel>::end<Pixel>() const;
+
     template<>
     PixelRect Rect<Pixel>::toPixelRect([[maybe_unused]] const Real gridConstant) const
     {
@@ -40,30 +43,6 @@ namespace Base
     RealRect Rect<Real>::toRealRect([[maybe_unused]] const Real gridConstant) const
     {
         return *this;
-    }
-
-    template<>
-    const PixelRectIterator Rect<Pixel>::begin() const
-    {
-        return PixelRectIterator(*this);
-    }
-
-    template<>
-    const PixelRectIterator Rect<Real>::begin() const
-    {
-        throw IllegalStateError("Iterating over a non-discrete rect");
-    }
-
-    template<>
-    const PixelRectIterator Rect<Pixel>::end() const
-    {
-        return PixelRectIterator();
-    }
-
-    template<>
-    const PixelRectIterator Rect<Real>::end() const
-    {
-        throw IllegalStateError("Iterating over a non-discrete rect");
     }
 
     // ====================================================================== //
@@ -109,4 +88,5 @@ namespace Base
     {
         return &currentCoordinate;
     }
+
 }

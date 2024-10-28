@@ -33,8 +33,13 @@ namespace Base
 
         std::string to_string() const;
 
-        const PixelRectIterator begin() const;
-        const PixelRectIterator end() const;
+        template<class Q = T>
+        typename std::enable_if<std::is_integral<Q>::value, const PixelRectIterator>::type
+        begin() const;
+
+        template<class Q = T>
+        typename std::enable_if<std::is_integral<Q>::value, const PixelRectIterator>::type
+        end() const;
     };
 
     class PixelRectIterator
