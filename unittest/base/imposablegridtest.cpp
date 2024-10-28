@@ -32,10 +32,6 @@ void ImposableGridTest::clipping()
      * # # # # #
      */
     QCOMPARE(
-        imposer.getDstStart(target, at_within),
-        PixelCoordinate(-1, -1)
-    );
-    QCOMPARE(
         imposer.getSrcRect(target, at_within),
         PixelRect(-1, -1, 3, 3)
     );
@@ -49,10 +45,6 @@ void ImposableGridTest::clipping()
      *   # # # # #
      *   # # # # #
      */
-    QCOMPARE(
-        imposer.getDstStart(target, at_loClip),
-        PixelCoordinate(-2, -2)
-    );
     QCOMPARE(
         imposer.getSrcRect(target, at_loClip),
         PixelRect(0, 0, 2, 2)
@@ -68,32 +60,8 @@ void ImposableGridTest::clipping()
      *       . . .
      */
     QCOMPARE(
-        imposer.getDstStart(target, at_hiClip),
-        PixelCoordinate(1, 1)
-    );
-    QCOMPARE(
         imposer.getSrcRect(target, at_hiClip),
         PixelRect(-1, -1, 2, 2)
-    );
-
-    // TEST OPTIMIZED VERSION BEHAVES THE SAME
-    QCOMPARE(
-        imposer.getImposeInfo(target, at_within),
-        std::make_pair(imposer.getSrcRect(target, at_within),
-                       imposer.getDstStart(target, at_within)
-                      )
-    );
-    QCOMPARE(
-        imposer.getImposeInfo(target, at_loClip),
-        std::make_pair(imposer.getSrcRect(target, at_loClip),
-                       imposer.getDstStart(target, at_loClip)
-                      )
-    );
-    QCOMPARE(
-        imposer.getImposeInfo(target, at_hiClip),
-        std::make_pair(imposer.getSrcRect(target, at_hiClip),
-                       imposer.getDstStart(target, at_hiClip)
-                      )
     );
 }
 
@@ -101,25 +69,54 @@ void ImposableGridTest::impose()
 {
     const Real gridConstant = 2.0;
     const auto imposerDimensions = PixelRect(-1, -1, 3, 3);
-    auto imposerReal   = ImposableGrid<Real>(imposerDimensions, gridConstant);
+    auto imposerScalar = ImposableGrid<Scalar>(imposerDimensions, gridConstant);
     auto imposerVector = ImposableGrid<Vector>(imposerDimensions, gridConstant);
 
     const auto targetDimensions = PixelRect(-2, -2, 5, 5);
-    auto targetReal   = BaseGrid<Real>(targetDimensions, gridConstant);
+    auto targetScalar = BaseGrid<Scalar>(targetDimensions, gridConstant);
     auto targetVector = BaseGrid<Vector>(targetDimensions, gridConstant);
 
-    for (Pixel y = -1; y < 2; ++y)
+    const auto at = PixelCoordinate(+0, +0);
+    const auto v0 = RealCoordinate(0, 0);
+    const auto v1 = RealCoordinate(1, 1);
+    const auto v2 = RealCoordinate(2, 2);
+
+    for (const auto c: imposerDimensions)
     {
-        for (Pixel x = -1; x < 2; ++x)
-        {
-            const auto c = PixelCoordinate(x, y);
-            imposerReal[c] = 1.0;
-            imposerVector[c] = RealCoordinate(1, 1);
-        }
+        imposerScalar[c] = 1.0;
+        imposerVector[c] = v1;
     }
 
-    const auto at = PixelCoordinate(+0, +0);
+    imposerScalar.impose(targetScalar, at);
+    const auto expectedScalarValues = std::vector<Scalar>(
+    {
+        0, 0, 0, 0, 0,
+        0, 1, 1, 1, 0,
+        0, 1, 1, 1, 0,
+        0, 1, 1, 1, 0,
+        0, 0, 0, 0, 0
+    });
+    QCOMPARE(targetScalar.exposeValues(), expectedScalarValues);
 
-    imposerReal.impose(targetReal, at);
+    imposerScalar.impose(targetScalar, PixelCoordinate(-2, -2));
+    imposerScalar.impose(targetScalar, PixelCoordinate(+2, +2));
+    const auto expectedScalarValues2 = std::vector<Scalar>(
+    {
+        1, 1, 0, 0, 0,
+        1, 2, 1, 1, 0,
+        0, 1, 1, 1, 0,
+        0, 1, 1, 2, 1,
+        0, 0, 0, 1, 1
+    });
+    QCOMPARE(targetScalar.exposeValues(), expectedScalarValues2);
+
     imposerVector.impose(targetVector, at);
+    const auto expectedVectorValues = std::vector<Vector>(
+    {
+        v0, v0, v0, v0, v0,
+        v0, v1, v1, v1, v0,
+        v0, v1, v1, v1, v0,
+        v0, v1, v1, v1, v0,
+        v0, v0, v0, v0, v0
+    });
 }
