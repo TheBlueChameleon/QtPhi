@@ -46,18 +46,16 @@ void RectTest::ctor()
         Rect(0, 0, 1, -1)
     );
 
-    Base::PixelCoordinatePair pp1(PixelCoordinate(0, 0), PixelCoordinate(1, 1));
-    Base::PixelCoordinatePair pp2(PixelCoordinate(0, 1), PixelCoordinate(1, 0));
-    Rect<Pixel> pr1(pp1), pr2(pp2);
+    Rect<Pixel> pr1(PixelCoordinate(0, 0), PixelCoordinate(1, 1));
+    Rect<Pixel> pr2(PixelCoordinate(0, 1), PixelCoordinate(1, 0));
 
     QCOMPARE(pr1.getMin(), PixelCoordinate(0, 0));
     QCOMPARE(pr1.w, 2);
     QCOMPARE(pr1.h, 2);
     QCOMPARE(pr1, pr2);
 
-    Base::RealCoordinatePair  rp1(RealCoordinate(0.0, 0.0), RealCoordinate(1.0, 1.0));
-    Base::RealCoordinatePair  rp2(RealCoordinate(0.0, 1.0), RealCoordinate(1.0, 0.0));
-    Rect<Real>  rr1(rp1), rr2(rp2);
+    Rect<Real>  rr1(RealCoordinate(0.0, 0.0), RealCoordinate(1.0, 1.0));
+    Rect<Real>  rr2(RealCoordinate(0.0, 1.0), RealCoordinate(1.0, 0.0));
 
     QCOMPARE(rr1.getMin(), RealCoordinate(0.0, 0.0));
     QCOMPARE(rr1.w, 1.0);
@@ -68,32 +66,32 @@ void RectTest::ctor()
 void RectTest::getMinMaxSize()
 {
     const auto p = Rect(0, 0, 1, 2);
-    QCOMPARE(p.getMin(), PixelCoordinate(0, 0));
-    QCOMPARE(p.getMax(), PixelCoordinate(0, 1));
+    QCOMPARE(p.getMin(),  PixelCoordinate(0, 0));
+    QCOMPARE(p.getMax(),  PixelCoordinate(0, 1));
     QCOMPARE(p.getSize(), PixelCoordinate(1, 2));
 
     const auto r = Rect(0.0, 0.0, 1.0, 2.0);
-    QCOMPARE(r.getMin(), RealCoordinate(0, 0));
-    QCOMPARE(r.getMax(), RealCoordinate(1, 2));
+    QCOMPARE(r.getMin(),  RealCoordinate(0, 0));
+    QCOMPARE(r.getMax(),  RealCoordinate(1, 2));
     QCOMPARE(r.getSize(), RealCoordinate(1, 2));
 }
 
 void RectTest::contains()
 {
     const auto p = Rect(0, 0, 1, 2);
-    QVERIFY(p.contains(PixelCoordinate(0,0)));
-    QVERIFY(p.contains(PixelCoordinate(0,1)));
-    QVERIFY(!p.contains(PixelCoordinate(1,0)));
-    QVERIFY(!p.contains(PixelCoordinate(0,2)));
-    QVERIFY(!p.contains(PixelCoordinate(-1,-1)));
+    QVERIFY(+p.contains(PixelCoordinate(+0, +0)));
+    QVERIFY(+p.contains(PixelCoordinate(+0, +1)));
+    QVERIFY(!p.contains(PixelCoordinate(+1, +0)));
+    QVERIFY(!p.contains(PixelCoordinate(+0, +2)));
+    QVERIFY(!p.contains(PixelCoordinate(-1, -1)));
 
     const auto r = Rect(0.0, 0.0, 1.0, 2.0);
-    QVERIFY(r.contains(RealCoordinate(0,0)));
-    QVERIFY(r.contains(RealCoordinate(0,1)));
-    QVERIFY(r.contains(RealCoordinate(1,0)));
-    QVERIFY(r.contains(RealCoordinate(0,2)));
-    QVERIFY(r.contains(RealCoordinate(1,2)));
-    QVERIFY(!r.contains(RealCoordinate(-1,-1)));
+    QVERIFY(+r.contains(RealCoordinate(+0, +0)));
+    QVERIFY(+r.contains(RealCoordinate(+0, +1)));
+    QVERIFY(+r.contains(RealCoordinate(+1, +0)));
+    QVERIFY(+r.contains(RealCoordinate(+0, +2)));
+    QVERIFY(+r.contains(RealCoordinate(+1, +2)));
+    QVERIFY(!r.contains(RealCoordinate(-1, -1)));
 }
 
 void RectTest::iterator()
@@ -104,6 +102,7 @@ void RectTest::iterator()
     for (const auto& c: p)
     {
         ++count;
+        QVERIFY(p.contains(c));
     }
 
     QCOMPARE(count, p.w * p.h);

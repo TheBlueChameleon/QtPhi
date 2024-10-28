@@ -18,7 +18,7 @@ namespace Base
 
         Rect();
         Rect(const T x, const T y, const T w, const T h);
-        template<CoordinatePair P> Rect(const P& p);
+        Rect(const Coordinate<T>& boundary1, const Coordinate<T>& boundary2);
 
         Coordinate<T> getMin() const;
         Coordinate<T> getMax() const;

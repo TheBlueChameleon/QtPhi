@@ -32,16 +32,10 @@ namespace Base
     }
 
     template<PixelOrReal T>
-    template<CoordinatePair P>
-    Rect<T>::Rect(const P& p)
+    Rect<T>::Rect(const Coordinate<T>& boundary1, const Coordinate<T>& boundary2)
     {
-        static_assert(
-            std::is_same_v<T, typename P::first_type::baseType>,
-            "type mismatch in CTOR Rect from CoordinatePair"
-        );
-
-        const auto [x1, x2] = std::minmax(p.first.x, p.second.x);
-        const auto [y1, y2] = std::minmax(p.first.y, p.second.y);
+        const auto [x1, x2] = std::minmax(boundary1.x, boundary2.x);
+        const auto [y1, y2] = std::minmax(boundary1.y, boundary2.y);
 
         this->x = x1;
         this->y = y1;

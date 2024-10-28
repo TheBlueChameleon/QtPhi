@@ -8,14 +8,11 @@ namespace Base
     template struct Rect<Pixel>;
     template struct Rect<Real>;
 
-    // ====================================================================== //
-    // Rect template specializations
-
-    template Rect<Pixel>::Rect(const PixelCoordinatePair&);
-    template Rect<Real>::Rect(const RealCoordinatePair&);
-
     template typename std::enable_if<std::is_integral<Pixel>::value, const PixelRectIterator>::type Rect<Pixel>::begin<Pixel>() const;
     template typename std::enable_if<std::is_integral<Pixel>::value, const PixelRectIterator>::type Rect<Pixel>::end<Pixel>() const;
+
+    // ====================================================================== //
+    // Rect template specializations
 
     template<>
     PixelRect Rect<Pixel>::toPixelRect([[maybe_unused]] const Real gridConstant) const
@@ -28,7 +25,7 @@ namespace Base
     {
         const auto origin = this->getMin().toPixelCoordinate(gridConstant);
         const auto size   = this->getSize().toPixelCoordinate(gridConstant);
-        return PixelRect(PixelCoordinatePair(origin, size));
+        return PixelRect(origin.x, origin.y, size.x, size.y);
     }
 
     template<>
@@ -36,7 +33,7 @@ namespace Base
     {
         const auto origin = this->getMin().toRealCoordinate(gridConstant);
         const auto size   = this->getSize().toRealCoordinate(gridConstant);
-        return RealRect(RealCoordinatePair(origin, size));
+        return RealRect(origin.x, origin.y, size.x, size.y);
     }
 
     template<>
