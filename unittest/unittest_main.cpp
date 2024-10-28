@@ -7,18 +7,22 @@
 
 int main(int argc, char* argv[])
 {
-    // setup lambda
-    int status = 0;
-    auto runTest = [&status, argc, argv](QObject* obj)
-    {
-        status |= QTest::qExec(obj, argc, argv);
+    // *INDENT-OFF*
+    const std::vector<std::function<QObject*()>> testConstructors = {
+        []() {return new CoordinateTest;},
+        []() {return new RectTest;},
+        []() {return new BaseGridTest;},
+        []() {return new ImposableGridTest;},
     };
+    // *INDENT-ON*
 
-    // run suite
-    runTest(new CoordinateTest);
-    runTest(new RectTest);
-    runTest(new BaseGridTest);
-    runTest(new ImposableGridTest);
+    int status = 0;
+    for (const auto& ctor : testConstructors)
+    {
+        auto* test = ctor();
+        status |= QTest::qExec(test, argc, argv);
+        delete test;
+    }
 
     return status;
 }
