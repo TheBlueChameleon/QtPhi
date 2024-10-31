@@ -20,6 +20,12 @@ namespace Base
         Coordinate<T> operator-(const Coordinate<T>& rhs) const;
         Coordinate<T> operator*(const Real rhs) const;
         Coordinate<T> operator/(const Real rhs) const;
+
+        Coordinate<T>& operator+=(const Coordinate<T>& rhs);
+        Coordinate<T>& operator-=(const Coordinate<T>& rhs);
+        Coordinate<T>& operator*=(const Real rhs);
+        Coordinate<T>& operator/=(const Real rhs);
+
         bool operator==(const Coordinate<T>& rhs) const = default;
 
         PixelCoordinate toPixelCoordinate(const Real gridConstant) const;

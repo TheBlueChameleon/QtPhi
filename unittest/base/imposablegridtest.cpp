@@ -119,4 +119,6 @@ void ImposableGridTest::impose()
         v0, v1, v1, v1, v0,
         v0, v0, v0, v0, v0
     });
+    QCOMPARE(targetVector.exposeValues(), expectedVectorValues);
+
 }
