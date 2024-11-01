@@ -98,49 +98,38 @@ namespace Base
         using IPM = BaseGrid<T>::InterpolationMethod;
 
         const auto ipd = getInterpolationData(coordinate);
+        const auto valueLo = get(ipd.p1);
+        const auto valueHi = get(ipd.p2);
+
         switch (ipd.interpolationMethod)
         {
             case IPM::Point:
-                return get(ipd.p1);
+                return valueHi;
+
             case IPM::LinearX:
-                {
-                    const auto v1 = get(ipd.p1);
-                    const auto v2 = get(ipd.p2);
-                    return Interpolation::linear(
-                               coordinate.x,
-                               ipd.p1.x, v1,
-                               ipd.p2.x, v2
-                           );
-                }
+                return Interpolation::linear(
+                           coordinate.x,
+                           ipd.p1.x, valueLo,
+                           ipd.p2.x, valueHi
+                       );
+
             case IPM::LinearY:
-                {
-                    const auto v1 = get(ipd.p1);
-                    const auto v2 = get(ipd.p2);
-                    return Interpolation::linear(
-                               coordinate.y,
-                               ipd.p1.y, v1,
-                               ipd.p2.y, v2
-                           );
-                }
+                return Interpolation::linear(
+                           coordinate.y,
+                           ipd.p1.y, valueLo,
+                           ipd.p2.y, valueHi
+                       );
+
             case IPM::Planar:
                 {
-                    const auto p1 = ipd.p1;
-                    const auto p4 = ipd.p2;
-                    const auto p2 = PixelCoordinate(p4.x, p1.y);
-                    const auto p3 = PixelCoordinate(p1.x, p4.y);
-
-                    const auto r1 = p1.toRealCoordinate(gridConstant);
-                    const auto r4 = p4.toRealCoordinate(gridConstant);
-
-                    const auto v1 = get(p1);
-                    const auto v2 = get(p2);
-                    const auto v3 = get(p3);
-                    const auto v4 = get(p4);
-
+                    const auto valueLR = get(PixelCoordinate(ipd.p2.x, ipd.p1.y));
+                    const auto valueUL = get(PixelCoordinate(ipd.p1.x, ipd.p2.y));
+                    const auto realCoordinateLo = ipd.p1.toRealCoordinate(gridConstant);
+                    const auto realCoordinateHi = ipd.p2.toRealCoordinate(gridConstant);
                     return Interpolation::planar(coordinate,
-                                                 r1, r4,
-                                                 v1, v2,
-                                                 v3, v4);
+                                                 realCoordinateLo, realCoordinateHi,
+                                                 valueLo, valueLR,
+                                                 valueUL, valueHi);
                 }
             default:
                 throw IllegalStateError("Unknown InterpolationMethod in BaseGrid::get(RealCoordinate)");
@@ -167,32 +156,34 @@ namespace Base
         using IPM = BaseGrid<T>::InterpolationMethod;
 
         const auto anchor = coordinate.toPixelCoordinate(gridConstant);
-        const auto minCoords = dimensions.getMin();
         const auto maxCoords = dimensions.getMax();
 
         // safety override: p2..p4 not within the grid
-        if (anchor == maxCoords || anchor == minCoords)
+        if (anchor == maxCoords)
         {
+            // no check for == minCoordinates needed -- see below
             return IPD(IPM::Point, anchor, anchor);
         }
 
-        // toPixelCoordinate uses truncate => round to zero.
-        // ensure that anchor plus p2..p4 enclose coordinate
+        /* toPixelCoordinate uses truncate => round to zero.
+         * ensure that anchor plus p2..p4 enclose coordinate */
+        /* ">=" (instead of e.g. ">") gives bias to (+x, +y)
+         * ==> no need for minCoords */
         const auto x2 = anchor.x + (coordinate.x >= anchor.x ? 1 : -1);
-        const auto y2 = anchor.y + (coordinate.y >= anchor.x ? 1 : -1);
+        const auto y2 = anchor.y + (coordinate.y >= anchor.y ? 1 : -1);
 
         const auto p2 = PixelCoordinate(x2, anchor.y);
         const auto p3 = PixelCoordinate(anchor.x, y2);
         const auto p4 = PixelCoordinate(p2.x, p3.y);
 
         // safety override. p2, p3 not in grid: interpolate only using y
-        if (x2 > maxCoords.x || x2 < minCoords.x)
+        if (x2 > maxCoords.x)
         {
             return IPD(IPM::LinearY, anchor, p3);
         }
 
         // safety override. p3, p4 not in grid: interpolate only using y
-        if (y2 > maxCoords.y | y2 < minCoords.y)
+        if (y2 > maxCoords.y)
         {
             return IPD(IPM::LinearX, anchor, p2);
         }
