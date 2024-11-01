@@ -10,6 +10,18 @@ namespace Base
     template<ScalarOrVector T>
     class BaseGrid
     {
+        public:
+            enum class InterpolationMethod
+            {
+                Planar, LinearX, LinearY, Point
+            };
+            struct InterpolationData
+            {
+                BaseGrid<T>::InterpolationMethod interpolationMethod;
+                PixelCoordinate p1;
+                PixelCoordinate p2;
+            };
+
         protected:
             PixelRect       dimensions;
             Real            gridConstant;
@@ -36,6 +48,8 @@ namespace Base
 
             const T& get(const PixelCoordinate& coordinate) const;
             const T  get(const RealCoordinate& coordinate) const;
+
+            BaseGrid<T>::InterpolationData getInterpolationData(const RealCoordinate& coordinate) const;
 
             const std::vector<T>& exposeValues() const;
 
