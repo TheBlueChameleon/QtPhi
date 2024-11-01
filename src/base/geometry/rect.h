@@ -2,6 +2,7 @@
 #define RECT_H
 
 #include "base/geometry/coordinate.h"
+#include "base/geometry/pixelrectiterator.h"
 
 namespace Base
 {

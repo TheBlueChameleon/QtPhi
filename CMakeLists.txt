@@ -47,6 +47,7 @@ add_library(Phi-base STATIC
     src/base/geometry/pixelrectiterator.h   src/base/geometry/pixelrectiterator.cpp
     src/base/grid/basegrid.h                src/base/grid/basegrid.cpp
     src/base/grid/imposablegrid.h           src/base/grid/imposablegrid.cpp
+    src/base/interpolation/interpolation.h  src/base/interpolation/interpolation.cpp
 )
 
 if (ENABLE_AVX)
@@ -151,6 +152,7 @@ add_executable(unittest
     unittest/base/recttest.h unittest/base/recttest.cpp
     unittest/base/basegridtest.h unittest/base/basegridtest.cpp
     unittest/base/imposablegridtest.h unittest/base/imposablegridtest.cpp
+    unittest/base/interpolationtest.h unittest/base/interpolationtest.cpp
 )
 
 target_link_libraries(unittest PRIVATE

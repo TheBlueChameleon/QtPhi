@@ -1,7 +1,8 @@
+#include <iostream>
+
 #include "imposablegridtest.h"
 
 #include "base/grid/imposablegrid.h"
-#include <iostream>
 
 using namespace Base;
 

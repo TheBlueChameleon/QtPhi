@@ -40,6 +40,12 @@ namespace Base
             PixelRectIterator& operator=(const PixelRectIterator& other) = default;
             PixelRectIterator& operator=(PixelRectIterator&& other) = default;
     };
+
+    static_assert(std::weakly_incrementable<PixelRectIterator>);
+    static_assert(std::input_or_output_iterator<PixelRectIterator>);
+    static_assert(std::indirectly_readable<PixelRectIterator>);
+    static_assert(std::input_iterator<PixelRectIterator>);
+    static_assert(std::incrementable<PixelRectIterator>);
 }
 
 #endif // PIXELRECTITERATOR_H

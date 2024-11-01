@@ -4,7 +4,6 @@
 
 #include "base/errors.h"
 #include "base/grid/basegrid.h"
-#include "base/geometry/pixelrectiterator.h"
 
 using namespace Base;
 

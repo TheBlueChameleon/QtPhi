@@ -6,6 +6,7 @@
 #include "base/coordinatetest.h"
 #include "base/imposablegridtest.h"
 #include "base/recttest.h"
+#include "base/interpolationtest.h"
 
 void reportOverall(const std::vector<std::string>& failedTests);
 
@@ -17,6 +18,7 @@ int main(int argc, char* argv[])
         []() {return new RectTest;},
         []() {return new BaseGridTest;},
         []() {return new ImposableGridTest;},
+        []() {return new InterpolationTest;},
     };
     // *INDENT-ON*
 
