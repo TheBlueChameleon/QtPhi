@@ -2,6 +2,7 @@
 #define IMPOSABLEGRID_H
 
 #include "basegrid.h"
+#include "base/geometry/pixelrectiterator.h"
 
 namespace Base
 {

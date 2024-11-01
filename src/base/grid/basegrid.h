@@ -1,7 +1,6 @@
 #ifndef BASEGRID_H
 #define BASEGRID_H
 
-#include <optional>
 #include <vector>
 
 #include "base/geometry/rect.h"

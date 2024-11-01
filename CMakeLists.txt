@@ -41,11 +41,12 @@ include_directories(
 add_library(Phi-base STATIC
     src/base/base.h
     src/base/concepts.h
-    src/base/errors.h src/base/errors.cpp
-    src/base/geometry/coordinate.h src/base/geometry/coordinate.txx src/base/geometry/coordinate.cpp
-    src/base/geometry/rect.h src/base/geometry/rect.txx src/base/geometry/rect.cpp
-    src/base/grid/basegrid.h src/base/grid/basegrid.txx src/base/grid/basegrid.cpp
-    src/base/grid/imposablegrid.h src/base/grid/imposablegrid.txx src/base/grid/imposablegrid.cpp
+    src/base/errors.h                       src/base/errors.cpp
+    src/base/geometry/coordinate.h          src/base/geometry/coordinate.cpp
+    src/base/geometry/rect.h                src/base/geometry/rect.cpp
+    src/base/geometry/pixelrectiterator.h   src/base/geometry/pixelrectiterator.cpp
+    src/base/grid/basegrid.h                src/base/grid/basegrid.cpp
+    src/base/grid/imposablegrid.h           src/base/grid/imposablegrid.cpp
 )
 
 if (ENABLE_AVX)
@@ -70,7 +71,7 @@ endif()
 
 set(UI_SOURCES
         src/main.cpp
-        src/ui/mainwindow.h src/ui/mainwindow.cpp src/ui/mainwindow.ui
+        src/ui/mainwindow.h src/ui/mainwindow.cpp
 )
 
 # ============================================================================ #

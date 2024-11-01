@@ -1,8 +1,10 @@
+#include <iostream>
+
 #include "basegridtest.h"
 
 #include "base/errors.h"
 #include "base/grid/basegrid.h"
-#include <iostream>
+#include "base/geometry/pixelrectiterator.h"
 
 using namespace Base;
 

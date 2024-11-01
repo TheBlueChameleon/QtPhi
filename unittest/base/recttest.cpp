@@ -2,6 +2,7 @@
 
 #include "base/geometry/rect.h"
 #include "base/errors.h"
+#include "base/geometry/pixelrectiterator.h"
 
 using namespace Base;
 
