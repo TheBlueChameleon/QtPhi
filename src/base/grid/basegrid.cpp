@@ -71,26 +71,6 @@ namespace Base
     }
 
     template<ScalarOrVector T>
-    T& BaseGrid<T>::at(const RealCoordinate& coordinate)
-    {
-        PixelCoordinate pixelCoordinate = coordinate.toPixelCoordinate(gridConstant);
-        return at(pixelCoordinate);
-    }
-
-    template<ScalarOrVector T>
-    T& BaseGrid<T>::at(const PixelCoordinate& coordinate)
-    {
-        if (this->dimensions.contains(coordinate))
-        {
-            return (*this)[coordinate];
-        }
-        else
-        {
-            throw CoordinatesError("Coordinate out of bounds");
-        }
-    }
-
-    template<ScalarOrVector T>
     Pixel BaseGrid<T>::getIndexFromPixelCoordinate(const PixelCoordinate& coordinate) const
     {
         const auto shiftedByOrigin = coordinate - dimensions.getMin();
@@ -104,13 +84,6 @@ namespace Base
     }
 
     template<ScalarOrVector T>
-    T& BaseGrid<T>::operator [](const RealCoordinate& coordinate)
-    {
-        PixelCoordinate pixelCoordinate = coordinate.toPixelCoordinate(gridConstant);
-        return (*this)[pixelCoordinate];
-    }
-
-    template<ScalarOrVector T>
     const T& BaseGrid<T>::get(const PixelCoordinate& coordinate) const
     {
         return values[getIndexFromPixelCoordinate(coordinate)];
@@ -119,6 +92,7 @@ namespace Base
     template<ScalarOrVector T>
     const T& BaseGrid<T>::get(const RealCoordinate& coordinate) const
     {
+        // TODO: use interpolation
         return get(coordinate.toPixelCoordinate(gridConstant));
     }
 

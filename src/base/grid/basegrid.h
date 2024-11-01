@@ -21,22 +21,18 @@ namespace Base
             const PixelRect& getPixelDimensions() const;
             RealRect         getRealDimensions() const;
 
-            PixelCoordinate getPixelOrigin() const;
-            PixelCoordinate getPixelSize() const;
+            PixelCoordinate  getPixelOrigin() const;
+            PixelCoordinate  getPixelSize() const;
 
-            RealCoordinate getRealOrigin() const;
-            RealCoordinate getRealSize() const;
+            RealCoordinate   getRealOrigin() const;
+            RealCoordinate   getRealSize() const;
 
             Real getGridConstant() const;
 
             void setOrigin(const PixelCoordinate& origin);
             void setOrigin(const RealCoordinate& origin);
 
-            T& at(const RealCoordinate& coordinate);
-            T& at(const PixelCoordinate& coordinate);
-
             T& operator [](const PixelCoordinate& coordinate);
-            T& operator [](const RealCoordinate& coordinate);
 
             const T& get(const PixelCoordinate& coordinate) const;
             const T& get(const RealCoordinate& coordinate) const;
