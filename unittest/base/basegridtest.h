@@ -12,6 +12,7 @@ class BaseGridTest : public QObject
         void ctor();
         void getDimensionData();
         void dataAccess();
+        void interpolation();
 };
 
 #endif // BASEGRIDTEST_H

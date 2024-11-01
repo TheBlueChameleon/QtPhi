@@ -35,7 +35,7 @@ namespace Base
             T& operator [](const PixelCoordinate& coordinate);
 
             const T& get(const PixelCoordinate& coordinate) const;
-            const T& get(const RealCoordinate& coordinate) const;
+            const T  get(const RealCoordinate& coordinate) const;
 
             const std::vector<T>& exposeValues() const;
 

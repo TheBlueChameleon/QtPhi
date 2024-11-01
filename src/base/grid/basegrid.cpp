@@ -1,4 +1,7 @@
+#include <iostream>
+
 #include "base/errors.h"
+#include "base/interpolation/interpolation.h"
 #include "basegrid.h"
 
 namespace Base
@@ -90,10 +93,76 @@ namespace Base
     }
 
     template<ScalarOrVector T>
-    const T& BaseGrid<T>::get(const RealCoordinate& coordinate) const
+    const T BaseGrid<T>::get(const RealCoordinate& coordinate) const
     {
-        // TODO: use interpolation
-        return get(coordinate.toPixelCoordinate(gridConstant));
+        /* construct this rect for interpolation purpose:
+         *
+         * FOR POSITIVE COORDINATES         | FOR NEGATIVE COORDINATES
+         *  anchor   p2                     |     p4   p3
+         *       *---*                      |      *---*
+         *       | * |  ·· coordinate.y     |      | * |  ·· coordinate.y
+         *       *---*  ·· y2               |      *---*  ·· y2
+         *      p3 : p4                     |     p2 : anchor
+         *         : :                      |      : :
+         *         : x2                     |     x2 :
+         *      coordinate.x                |     coordinate.x
+         */
+
+        const auto anchor = coordinate.toPixelCoordinate(gridConstant);
+        const auto minCoords = dimensions.getMin();
+        const auto maxCoords = dimensions.getMax();
+
+        // safety override: p2..p4 not within the grid
+        if (anchor == maxCoords || anchor == minCoords)
+        {
+            return this->get(anchor);
+        }
+
+        // toPixelCoordinate uses truncate => round to zero.
+        // ensure that anchor plus p2..p4 enclose coordinate
+        const auto x2 = anchor.x + (coordinate.x >= anchor.x ? 1 : -1);
+        const auto y2 = anchor.y + (coordinate.y >= anchor.x ? 1 : -1);
+
+        const auto p2 = PixelCoordinate(x2, anchor.y);
+        const auto p3 = PixelCoordinate(anchor.x, y2);
+        const auto p4 = PixelCoordinate(p2.x, p3.y);
+
+        // safety override. p2, p3 not in grid: interpolate only using y
+        if (x2 > maxCoords.x || x2 < minCoords.x)
+        {
+            const auto v1 = get(anchor);
+            const auto v2 = get(p3);
+            return Interpolation::linear(
+                       coordinate.y,
+                       anchor.y, v1,
+                       y2, v2
+                   );
+        }
+
+        // safety override. p3, p4 not in grid: interpolate only using y
+        if (y2 > maxCoords.y | y2 < minCoords.y)
+        {
+            const auto v1 = get(anchor);
+            const auto v2 = get(p2);
+            return Interpolation::linear(
+                       coordinate.x,
+                       anchor.x, v1,
+                       x2, v2
+                   );
+        }
+
+        const auto r1 = anchor.toRealCoordinate(gridConstant);
+        const auto r4 = p4.toRealCoordinate(gridConstant);
+
+        const auto v1 = get(anchor);
+        const auto v2 = get(p2);
+        const auto v3 = get(p3);
+        const auto v4 = get(p4);
+
+        return Interpolation::planar(coordinate,
+                                     r1, r4,
+                                     v1, v2,
+                                     v3, v4);
     }
 
     template<ScalarOrVector T>

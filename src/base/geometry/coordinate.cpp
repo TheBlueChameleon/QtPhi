@@ -117,9 +117,18 @@ namespace Base
                );
     }
 
+    template<PixelOrReal T>
+    std::ostream& operator<< (std::ostream& stream, const Coordinate<T>& coordinate)
+    {
+        return (stream << coordinate.to_string());
+    }
+
     // ====================================================================== //
     // instantiations
 
     template struct Coordinate<Pixel>;
     template struct Coordinate<Real>;
+
+    template std::ostream& operator<< (std::ostream& stream, const Coordinate<Pixel>& coordinate);
+    template std::ostream& operator<< (std::ostream& stream, const Coordinate<Real>& coordinate);
 }

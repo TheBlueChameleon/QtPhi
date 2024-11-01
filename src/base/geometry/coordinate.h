@@ -36,6 +36,9 @@ namespace Base
         static Coordinate<T> min(const Coordinate<T>& lhs, const Coordinate<T>& rhs);
         static Coordinate<T> max(const Coordinate<T>& lhs, const Coordinate<T>& rhs);
     };
+
+    template<PixelOrReal T>
+    std::ostream& operator<< (std::ostream& stream, const Coordinate<T>& coordinate);
 }
 
 #endif // COORDINATES_H

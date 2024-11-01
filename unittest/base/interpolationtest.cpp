@@ -72,7 +72,6 @@ void InterpolationTest::planar()
      *   X = (1.5, 1.25)  x = 0.75 * 3.5 + 0.25 * 1.5 = 3.0
      *   U = (1.5, 2.00)  u = 1.5
      *   L = (1.5, 1.00)  l = 3.5
-     *
      */
     QCOMPARE(
         Interpolation::planar(RealCoordinate(1.5, 1.25),
@@ -95,7 +94,6 @@ void InterpolationTest::planar()
      *   X = (1.5, 1.25)  x = 0.25 * 3.5 + 0.75 * 1.5 = 2.0
      *   U = (1.5, 2.00)  u = 1.5
      *   L = (1.5, 1.00)  l = 3.5
-     *
      */
     QCOMPARE(
         Interpolation::planar(RealCoordinate(1.5, 1.25),

@@ -49,3 +49,68 @@ void BaseGridTest::dataAccess()
         expected
     );
 }
+
+void BaseGridTest::interpolation()
+{
+    /* GRID OVERALL:
+     *   0 0 5 1 2
+     *   0 0 0 3 4
+     *   5 0 0 0 5
+     *   4 3 0 0 0
+     *   2 1 5 0 0
+     *
+     * INTERPOLATION SCHEME:
+     *  (flipped for negative coordinates)
+     *     coordinates       values
+     *   (1,2)   (2,2)     1       2
+     *     *---U---*       *---u---*
+     *     |       |       |       |
+     *     |   X   |       |   x   |
+     *     *---L---*       *---l---*
+     *   (1,1)   (2,1)     3       4
+     *
+     *   X = (1.5, 1.25)  x = 0.75 * 3.5 + 0.25 * 1.5 = 3.0
+     *   U = (1.5, 2.00)  u = 1.5
+     *   L = (1.5, 1.00)  l = 3.5
+     */
+
+
+    /* TODO programmatically ensure interpolation is mem-safe.
+     * So far, I only cout-ensured that at some point, no unsafe coordinates
+     * were used in interpolation.
+     * The QCOMPARE(..., 5.0) checks do not tell if nonsensical values were
+     * read.
+     *
+     * Idea: have a method getAt(), using the same backend like get(), but
+     * throwing whenever an index is out of bounds
+     */
+
+    const auto dimension = PixelRect(-2, -2, 5, 5);
+    auto grid = BaseGrid<Real>(dimension, 1.0);
+
+    grid[PixelCoordinate(+1, +2)] = 1;
+    grid[PixelCoordinate(+2, +2)] = 2;
+    grid[PixelCoordinate(+1, +1)] = 3;
+    grid[PixelCoordinate(+2, +1)] = 4;
+
+    grid[PixelCoordinate(-1, -2)] = 1;
+    grid[PixelCoordinate(-2, -2)] = 2;
+    grid[PixelCoordinate(-1, -1)] = 3;
+    grid[PixelCoordinate(-2, -1)] = 4;
+
+    grid[PixelCoordinate(+2, +0)] = 5;
+    grid[PixelCoordinate(-2, +0)] = 5;
+    grid[PixelCoordinate(+0, +2)] = 5;
+    grid[PixelCoordinate(+0, -2)] = 5;
+
+    QCOMPARE(grid.get(RealCoordinate(+1.5, +1.25)), 3.0);
+    QCOMPARE(grid.get(RealCoordinate(-1.5, -1.25)), 3.0);
+
+    QCOMPARE(grid.get(RealCoordinate(+2.0, +2.0)), 2.0);
+    QCOMPARE(grid.get(RealCoordinate(+2.0, +0.0)), 5.0);
+    QCOMPARE(grid.get(RealCoordinate(+0.0, +2.0)), 5.0);
+
+    QCOMPARE(grid.get(RealCoordinate(-2.0, -2.0)), 2.0);
+    QCOMPARE(grid.get(RealCoordinate(-2.0, -0.0)), 5.0);
+    QCOMPARE(grid.get(RealCoordinate(-0.0, -2.0)), 5.0);
+}
