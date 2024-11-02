@@ -14,7 +14,8 @@ namespace Gui
         private:
             Q_OBJECT
 
-            ColorMap colorMap;
+            ColorMap colorMap = ColorMap(0, 1);
+            std::string numberFormat = "{: .2f}";
 
         public:
             ColorMapLegend(QWidget* parent, const ColorMap& colorMap);
@@ -23,6 +24,9 @@ namespace Gui
 
             const ColorMap& getColorMap() const;
             ColorMap& colorMapRef();
+
+            std::string getNumberFormat() const;
+            void setNumberFormat(const std::string& newNumberFormat);
 
         public slots:
             void paintEvent(QPaintEvent* paintEvent);

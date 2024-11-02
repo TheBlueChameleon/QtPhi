@@ -21,13 +21,13 @@ namespace Gui
     const auto xLineLength = 5;
 
     ColorMapLegend::ColorMapLegend(QWidget* parent, const ColorMap& colorMap):
-        QWidget(parent), colorMap(colorMap)
+        QWidget(parent)
     {
         init();
     }
 
     ColorMapLegend::ColorMapLegend(QWidget* parent):
-        QWidget{parent}, colorMap(ColorMap(0, 1))
+        QWidget{parent}
     {
         init();
     }
@@ -52,6 +52,16 @@ namespace Gui
     ColorMap& ColorMapLegend::colorMapRef()
     {
         return colorMap;
+    }
+
+    std::string ColorMapLegend::getNumberFormat() const
+    {
+        return numberFormat;
+    }
+
+    void ColorMapLegend::setNumberFormat(const std::string& newNumberFormat)
+    {
+        numberFormat = newNumberFormat;
     }
 
     void ColorMapLegend::paintEvent(QPaintEvent* paintEvent)
@@ -106,19 +116,22 @@ namespace Gui
         const auto yBottom = this->size().height() - yMarginBottom - 1;
         const auto yZero = (yTop + yBottom) / 2;
 
-        constexpr auto fmt = "{}";
+        const auto vMin = colorMap.getMin();
+        const auto vMax = colorMap.getMax();
 
-        const auto textTop = std::format(fmt, colorMap.getMax());
+        const auto textTop = std::vformat(numberFormat, std::make_format_args(vMax));
         painter.drawLine(xLineStart, yTop, xLineEnd, yTop);
         painter.drawText(xTextStart, yTop + 3, textTop.c_str());
 
         if (colorMap.crossesZero())
         {
+            const auto zero = 0.0; // cannot use std::make_format_args with rvalue refs (i.e. number literals)
+            const auto textZero = std::vformat(numberFormat, std::make_format_args(zero));
             painter.drawLine(xLineStart, yZero, xLineEnd, yZero);
-            painter.drawText(xTextStart, yZero + 3, "0");
+            painter.drawText(xTextStart, yZero + 3, textZero.c_str());
         }
 
-        const auto textBottom = std::format(fmt, colorMap.getMin());
+        const auto textBottom = std::vformat(numberFormat, std::make_format_args(vMin));
         painter.drawLine(xLineStart, yBottom, xLineEnd, yBottom);
         painter.drawText(xTextStart, yBottom + 3, textBottom.c_str());
     }
