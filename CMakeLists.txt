@@ -3,7 +3,7 @@ cmake_minimum_required(VERSION 3.16)
 # ============================================================================ #
 # language definition
 
-project(QtPhi
+project(PhiGame
     VERSION 0.1
     LANGUAGES CXX
 )
@@ -78,9 +78,9 @@ if (ENABLE_AVX)
 endif()
 
 # ............................................................................ #
-# Gui
+# gui
 
-add_library(Phi-Gui STATIC
+add_library(Phi-gui STATIC
     src/ui/mainwindow.h src/ui/mainwindow.cpp
     src/ui/widgets/colormap.h src/ui/widgets/colormap.cpp
     src/ui/widgets/colormaplegend.h src/ui/widgets/colormaplegend.cpp
@@ -88,19 +88,19 @@ add_library(Phi-Gui STATIC
 )
 
 # ............................................................................ #
-# Main
+# main
 
 set(MAIN_SOURCES
     src/main.cpp
 )
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
-    qt_add_executable(Phi-Main
+    qt_add_executable(Phi-main
         MANUAL_FINALIZATION
         ${MAIN_SOURCES}
     )
 else()
-    qt_add_executable(Phi-Main
+    qt_add_executable(Phi-main
         ${MAIN_SOURCES}
     )
 endif()
@@ -108,16 +108,16 @@ endif()
 # ============================================================================ #
 # linker setup
 
-target_link_libraries(Phi-Gui PRIVATE
+target_link_libraries(Phi-gui PRIVATE
     Phi-base
 
     Qt${QT_VERSION_MAJOR}::Widgets
 )
 
-target_link_libraries(Phi-Main PRIVATE
+target_link_libraries(Phi-main PRIVATE
     Phi-base
     Phi-physics
-    Phi-Gui
+    Phi-gui
 
     Qt${QT_VERSION_MAJOR}::Widgets
 )
@@ -126,9 +126,9 @@ target_link_libraries(Phi-Main PRIVATE
 # If you are developing for iOS or macOS you should consider setting an
 # explicit, fixed bundle identifier manually though.
 if(${QT_VERSION} VERSION_LESS 6.1.0)
-  set(BUNDLE_ID_OPTION MACOSX_BUNDLE_GUI_IDENTIFIER com.example.Phi-Gui)
+  set(BUNDLE_ID_OPTION MACOSX_BUNDLE_GUI_IDENTIFIER com.example.Phi-main)
 endif()
-set_target_properties(Phi-Main PROPERTIES
+set_target_properties(Phi-main PROPERTIES
     ${BUNDLE_ID_OPTION}
     MACOSX_BUNDLE_BUNDLE_VERSION ${PROJECT_VERSION}
     MACOSX_BUNDLE_SHORT_VERSION_STRING ${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR}
@@ -137,16 +137,15 @@ set_target_properties(Phi-Main PROPERTIES
 )
 
 include(GNUInstallDirs)
-install(TARGETS Phi-Main
+install(TARGETS Phi-main
     BUNDLE DESTINATION .
     LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
     RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
 )
 
 if(QT_VERSION_MAJOR EQUAL 6)
-    qt_finalize_executable(Phi-Main)
+    qt_finalize_executable(Phi-main)
 endif()
-
 
 # ============================================================================ #
 # unit test framework
