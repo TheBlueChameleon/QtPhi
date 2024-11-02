@@ -3,13 +3,16 @@
 
 #include <QMainWindow>
 
-class MainWindow : public QMainWindow
+namespace Gui
 {
-    Q_OBJECT
-public:
-    explicit MainWindow(QWidget *parent = nullptr);
+    class MainWindow : public QMainWindow
+    {
+            Q_OBJECT
+        public:
+            explicit MainWindow(QWidget* parent = nullptr);
 
-signals:
-};
+        signals:
+    };
+}
 
 #endif // MAINWINDOW_H

@@ -1,5 +1,8 @@
 #include "mainwindow.h"
 
-MainWindow::MainWindow(QWidget *parent)
-    : QMainWindow{parent}
-{}
+namespace Gui
+{
+    MainWindow::MainWindow(QWidget* parent)
+        : QMainWindow{parent}
+    {}
+}
