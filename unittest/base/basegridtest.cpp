@@ -36,10 +36,9 @@ void BaseGridTest::dataAccess()
     const auto dimension = PixelRect(-1, -2, 3, 4);
     auto grid = BaseGrid<Real>(dimension, 1.0);
 
-    Real v = 0;
     for (const auto& c: grid.getPixelDimensions())
     {
-        grid[c] = v++;
+        grid[c] = grid.getIndexFromPixelCoordinate(c);
     }
 
     auto expected = std::vector<Real>(dimension.w * dimension.h);

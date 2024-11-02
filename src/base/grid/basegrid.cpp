@@ -74,16 +74,16 @@ namespace Base
     }
 
     template<ScalarOrVector T>
+    T& BaseGrid<T>::operator [](const PixelCoordinate& coordinate)
+    {
+        return values[getIndexFromPixelCoordinate(coordinate)];
+    }
+
+    template<ScalarOrVector T>
     Pixel BaseGrid<T>::getIndexFromPixelCoordinate(const PixelCoordinate& coordinate) const
     {
         const auto shiftedByOrigin = coordinate - dimensions.getMin();
         return shiftedByOrigin.y * dimensions.w + shiftedByOrigin.x;
-    }
-
-    template<ScalarOrVector T>
-    T& BaseGrid<T>::operator [](const PixelCoordinate& coordinate)
-    {
-        return values[getIndexFromPixelCoordinate(coordinate)];
     }
 
     template<ScalarOrVector T>

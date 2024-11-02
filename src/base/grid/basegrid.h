@@ -45,16 +45,13 @@ namespace Base
             void setOrigin(const RealCoordinate& origin);
 
             T& operator [](const PixelCoordinate& coordinate);
+            Pixel getIndexFromPixelCoordinate(const PixelCoordinate& coordinate) const;
 
             const T& get(const PixelCoordinate& coordinate) const;
             const T  get(const RealCoordinate& coordinate) const;
-
             BaseGrid<T>::InterpolationData getInterpolationData(const RealCoordinate& coordinate) const;
 
             const std::vector<T>& exposeValues() const;
-
-        private:
-            Pixel getIndexFromPixelCoordinate(const PixelCoordinate& coordinate) const;
     };
 }
 
