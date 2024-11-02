@@ -12,7 +12,8 @@ namespace Gui
         private:
             Q_OBJECT
 
-            ColorMapLegend* cmap;
+            ColorMap* cmap;
+            ColorMapLegend* cmapLegend;
 
         public:
             explicit MainWindow(QWidget* parent = nullptr);

@@ -52,6 +52,7 @@ add_library(Phi-base STATIC
     src/base/base.h
     src/base/concepts.h
     src/base/errors.h                       src/base/errors.cpp
+    src/base/functions/functions.h          src/base/functions/functions.cpp
     src/base/geometry/coordinate.h          src/base/geometry/coordinate.cpp
     src/base/geometry/rect.h                src/base/geometry/rect.cpp
     src/base/geometry/pixelrectiterator.h   src/base/geometry/pixelrectiterator.cpp
@@ -81,10 +82,11 @@ endif()
 # gui
 
 add_library(Phi-gui STATIC
-    src/ui/mainwindow.h src/ui/mainwindow.cpp
-    src/ui/widgets/colormap.h src/ui/widgets/colormap.cpp
+    src/ui/mainwindow.h             src/ui/mainwindow.cpp
+    src/ui/colormap/colormap.h
+    src/ui/colormap/lerpcolormap.h  src/ui/colormap/lerpcolormap.cpp
     src/ui/widgets/colormaplegend.h src/ui/widgets/colormaplegend.cpp
-    src/ui/widgets/gridsview.h src/ui/widgets/gridsview.cpp
+    src/ui/widgets/gridsview.h      src/ui/widgets/gridsview.cpp
 )
 
 # ............................................................................ #

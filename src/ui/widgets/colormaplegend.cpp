@@ -5,6 +5,7 @@
 #include <format>
 
 #include "base/interpolation/interpolation.h"
+#include "ui/colormap/lerpcolormap.h"
 
 #include "colormaplegend.h"
 
@@ -20,38 +21,20 @@ namespace Gui
     const auto xSpacing = 5;
     const auto xLineLength = 5;
 
-    ColorMapLegend::ColorMapLegend(QWidget* parent, const ColorMap& colorMap):
-        QWidget(parent)
-    {
-        init();
-    }
-
-    ColorMapLegend::ColorMapLegend(QWidget* parent):
-        QWidget{parent}
-    {
-        init();
-    }
-
-    ColorMapLegend::ColorMapLegend(const ColorMap& colorMap):
-        QWidget(nullptr), colorMap(colorMap)
-    {
-        init();
-    }
-
-    void ColorMapLegend::init()
+    ColorMapLegend::ColorMapLegend(QWidget* parent, ColorMap* colorMap):
+        QWidget(parent), colorMap(colorMap)
     {
         this->setMinimumSize(QSize(50, 100));
-        colorMap.setMin(0);
     }
 
     const ColorMap& ColorMapLegend::getColorMap() const
     {
-        return colorMap;
+        return *colorMap;
     }
 
     ColorMap& ColorMapLegend::colorMapRef()
     {
-        return colorMap;
+        return *colorMap;
     }
 
     std::string ColorMapLegend::getNumberFormat() const
@@ -85,36 +68,20 @@ namespace Gui
     void ColorMapLegend::paintColorBar(QPainter& painter, const QRect& rectToUpdate)
     {
         const auto& size = this->size();
-        const auto& [rMin, rMax] = colorMap.getRange();
+        const auto& [rMin, rMax] = colorMap->getRange();
         const auto xMin = xMarginLeft;
         const auto yMin = yMarginTop;
         const auto xMax = xMin + colorBarWidth;
         const auto yMax = size.height() - yMarginBottom;
-        const auto yHalf = (yMin + yMax) / 2;
 
         for (auto y = std::max(yMin, rectToUpdate.top()); y < std::min(yMax, rectToUpdate.bottom()); ++y)
         {
-            const auto coordinateValue =
-                colorMap.crossesZero() ?
-                ((y < yHalf) ?
-                 Interpolation::linear(
-                     y,
-                     yMin, rMin,
-                     yHalf, 0.
-                 ) :
-                 Interpolation::linear(
-                     y,
-                     yHalf, 0.,
-                     yMax, rMax
-                 ))
-                :
-                Interpolation::linear(
-                    y,
-                    yMin, rMin,
-                    yMax, rMax
-                );
-            const auto pen = QPen(colorMap.get(coordinateValue));
-            painter.setPen(pen);
+            const auto coordinateValue = Interpolation::linear(
+                                             y,
+                                             yMin, rMin,
+                                             yMax, rMax
+                                         );
+            painter.setPen(QPen(colorMap->get(coordinateValue)));
             painter.drawLine(xMin, y, xMax, y);
         }
     }
@@ -124,21 +91,24 @@ namespace Gui
         painter.setFont(QFont("Arial", 9));
         painter.setPen(QPen(QColor("black")));
 
+        const auto [vMin, vMax] = colorMap->getRange();
         const auto xLineStart = xMarginLeft + colorBarWidth + xSpacing;
         const auto xLineEnd = xLineStart + xLineLength;
         const auto xTextStart = xLineEnd + xSpacing;
         const auto yTop = yMarginTop;
         const auto yBottom = this->size().height() - yMarginBottom - 1;
-        const auto yZero = (yTop + yBottom) / 2;
+        const auto yZero = Interpolation::linear<Real>(
+                               0,
+                               vMin, yBottom,
+                               vMax, yTop
+                           );
 
-        const auto vMin = colorMap.getMin();
-        const auto vMax = colorMap.getMax();
 
         const auto textTop = std::vformat(numberFormat, std::make_format_args(vMax));
         painter.drawLine(xLineStart, yTop, xLineEnd, yTop);
         painter.drawText(xTextStart, yTop + 3, textTop.c_str());
 
-        if (colorMap.crossesZero())
+        if (colorMap->contains(0))
         {
             const auto zero = 0.0; // cannot use std::make_format_args with rvalue refs (i.e. number literals)
             const auto textZero = std::vformat(numberFormat, std::make_format_args(zero));

@@ -5,7 +5,7 @@
 
 #include "base/concepts.h"
 
-#include "colormap.h"
+#include "ui/colormap/colormap.h"
 
 namespace Gui
 {
@@ -14,13 +14,11 @@ namespace Gui
         private:
             Q_OBJECT
 
-            ColorMap colorMap = ColorMap(0, 1);
+            ColorMap* colorMap = nullptr;
             std::string numberFormat = "{: .2f}";
 
         public:
-            ColorMapLegend(QWidget* parent, const ColorMap& colorMap);
-            ColorMapLegend(QWidget* parent = nullptr);
-            ColorMapLegend(const ColorMap& colorMap);
+            ColorMapLegend(QWidget* parent, ColorMap *colorMap);
 
             const ColorMap& getColorMap() const;
             ColorMap& colorMapRef();
@@ -32,8 +30,6 @@ namespace Gui
             void paintEvent(QPaintEvent* paintEvent);
 
         private:
-            void init();
-
             void paintBackground(QPainter& painter, const QRect& rectToUpdate);
             void paintColorBar(QPainter& painter, const QRect& rectToUpdate);
             void paintText(QPainter& painter, const QRect& rectToUpdate);
