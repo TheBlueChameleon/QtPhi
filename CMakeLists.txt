@@ -29,6 +29,16 @@ else()
 endif()
 
 # ============================================================================ #
+# QT components
+
+find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS
+    Widgets Test
+)
+find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS
+    Widgets Test
+)
+
+# ============================================================================ #
 # source file definitions
 
 include_directories(
@@ -68,63 +78,57 @@ if (ENABLE_AVX)
 endif()
 
 # ............................................................................ #
-# GUI
+# Gui
 
-set(UI_SOURCES
-        src/main.cpp
-        src/ui/mainwindow.h src/ui/mainwindow.cpp
-        src/ui/widgets/gridsview.h src/ui/widgets/gridsview.cpp
+add_library(Phi-Gui STATIC
+    src/ui/mainwindow.h src/ui/mainwindow.cpp
+    src/ui/widgets/colormap.h src/ui/widgets/colormap.cpp
+    src/ui/widgets/colormaplegend.h src/ui/widgets/colormaplegend.cpp
+    src/ui/widgets/gridsview.h src/ui/widgets/gridsview.cpp
 )
 
-# ============================================================================ #
-# QT components
+# ............................................................................ #
+# Main
 
-find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS
-    Widgets Test
-)
-find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS
-    Widgets Test
+set(MAIN_SOURCES
+    src/main.cpp
 )
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
-    qt_add_executable(Phi-GUI
+    qt_add_executable(Phi-Main
         MANUAL_FINALIZATION
-        ${UI_SOURCES}
+        ${MAIN_SOURCES}
     )
-# Define target properties for Android with Qt 6 as:
-#    set_property(TARGET Phi-GUI APPEND PROPERTY QT_ANDROID_PACKAGE_SOURCE_DIR
-#                 ${CMAKE_CURRENT_SOURCE_DIR}/android)
-# For more information, see https://doc.qt.io/qt-6/qt-add-executable.html#target-creation
 else()
-    if(ANDROID)
-        add_library(Phi-GUI SHARED
-            ${UI_SOURCES}
-        )
-# Define properties for Android with Qt 5 after find_package() calls as:
-#    set(ANDROID_PACKAGE_SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/android")
-    else()
-        add_executable(Phi-GUI
-            ${UI_SOURCES}
-        )
-    endif()
+    qt_add_executable(Phi-Main
+        ${MAIN_SOURCES}
+    )
 endif()
 
 # ============================================================================ #
 # linker setup
 
-target_link_libraries(Phi-GUI PRIVATE
+target_link_libraries(Phi-Gui PRIVATE
+    Phi-base
+
     Qt${QT_VERSION_MAJOR}::Widgets
+)
+
+target_link_libraries(Phi-Main PRIVATE
     Phi-base
     Phi-physics
+    Phi-Gui
+
+    Qt${QT_VERSION_MAJOR}::Widgets
 )
 
 # Qt for iOS sets MACOSX_BUNDLE_GUI_IDENTIFIER automatically since Qt 6.1.
 # If you are developing for iOS or macOS you should consider setting an
 # explicit, fixed bundle identifier manually though.
 if(${QT_VERSION} VERSION_LESS 6.1.0)
-  set(BUNDLE_ID_OPTION MACOSX_BUNDLE_GUI_IDENTIFIER com.example.Phi-GUI)
+  set(BUNDLE_ID_OPTION MACOSX_BUNDLE_GUI_IDENTIFIER com.example.Phi-Gui)
 endif()
-set_target_properties(Phi-GUI PROPERTIES
+set_target_properties(Phi-Main PROPERTIES
     ${BUNDLE_ID_OPTION}
     MACOSX_BUNDLE_BUNDLE_VERSION ${PROJECT_VERSION}
     MACOSX_BUNDLE_SHORT_VERSION_STRING ${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR}
@@ -133,14 +137,14 @@ set_target_properties(Phi-GUI PROPERTIES
 )
 
 include(GNUInstallDirs)
-install(TARGETS Phi-GUI
+install(TARGETS Phi-Main
     BUNDLE DESTINATION .
     LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
     RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
 )
 
 if(QT_VERSION_MAJOR EQUAL 6)
-    qt_finalize_executable(Phi-GUI)
+    qt_finalize_executable(Phi-Main)
 endif()
 
 
