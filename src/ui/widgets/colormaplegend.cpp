@@ -41,7 +41,7 @@ namespace Gui
     void ColorMapLegend::init()
     {
         this->setMinimumSize(QSize(50, 100));
-        colorMap.setMin(-5);
+        colorMap.setMin(0);
     }
 
     const ColorMap& ColorMapLegend::getColorMap() const
@@ -90,14 +90,29 @@ namespace Gui
         const auto yMin = yMarginTop;
         const auto xMax = xMin + colorBarWidth;
         const auto yMax = size.height() - yMarginBottom;
+        const auto yHalf = (yMin + yMax) / 2;
 
         for (auto y = std::max(yMin, rectToUpdate.top()); y < std::min(yMax, rectToUpdate.bottom()); ++y)
         {
-            const auto coordinateValue = Interpolation::linear(
-                                             y,
-                                             yMin, rMin,
-                                             yMax, rMax
-                                         );
+            const auto coordinateValue =
+                colorMap.crossesZero() ?
+                ((y < yHalf) ?
+                 Interpolation::linear(
+                     y,
+                     yMin, rMin,
+                     yHalf, 0.
+                 ) :
+                 Interpolation::linear(
+                     y,
+                     yHalf, 0.,
+                     yMax, rMax
+                 ))
+                :
+                Interpolation::linear(
+                    y,
+                    yMin, rMin,
+                    yMax, rMax
+                );
             const auto pen = QPen(colorMap.get(coordinateValue));
             painter.setPen(pen);
             painter.drawLine(xMin, y, xMax, y);
