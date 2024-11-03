@@ -14,7 +14,8 @@ using namespace Base;
 namespace Gui
 {
     const auto xMarginLeft = 10;
-    const auto yMarginTop = 10;
+    const auto yMarginTitle = 10;
+    const auto yMarginTop = yMarginTitle + 20;
     const auto xMarginRight = 10;
     const auto yMarginBottom = 10;
     const auto colorBarWidth = 20;
@@ -24,7 +25,7 @@ namespace Gui
     ColorMapLegend::ColorMapLegend(QWidget* parent, ColorMap* colorMap):
         QWidget(parent), colorMap(colorMap)
     {
-        this->setMinimumSize(QSize(80, 100));
+        this->setMinimumSize(QSize(100, 120));
     }
 
     const ColorMap& ColorMapLegend::getColorMap() const
@@ -45,6 +46,16 @@ namespace Gui
     void ColorMapLegend::setNumberFormat(const std::string& newNumberFormat)
     {
         numberFormat = newNumberFormat;
+    }
+
+    std::string ColorMapLegend::getTitle() const
+    {
+        return title;
+    }
+
+    void ColorMapLegend::setTitle(const std::string& newTitle)
+    {
+        title = newTitle;
     }
 
     void ColorMapLegend::paintEvent(QPaintEvent* paintEvent)
@@ -90,6 +101,8 @@ namespace Gui
     {
         painter.setFont(QFont("Arial", 9));
         painter.setPen(QPen(QColor("black")));
+
+        painter.drawText(xMarginLeft, yMarginTitle + 10, title.c_str());
 
         const auto [vMin, vMax] = colorMap->getRange();
         const auto xLineStart = xMarginLeft + colorBarWidth + xSpacing;

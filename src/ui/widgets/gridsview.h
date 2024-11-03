@@ -56,9 +56,15 @@ namespace Gui
             enum class Component {Tiles, Dots, Arrows};
 
             void update(const ScalarGrid* grid, const Component component);
+            LerpColorMap::ColorScheme colorSchemeForComponent(const Component component);
 
-            void updateLegend(const ScalarGrid* grid, ColorMapLegend*& legend, ColorMap*& map, const LerpColorMap::ColorScheme colorScheme);
-            void addLegend(const ScalarGrid* grid, ColorMapLegend*& legend, ColorMap*& map, const LerpColorMap::ColorScheme colorScheme);
+            void updateScene();
+            void updateSceneTiles();
+            void updateSceneDots();
+            void updateSceneArrows();
+
+            void updateLegend(const ScalarGrid* grid, ColorMapLegend*& legend, ColorMap*& map, const Component component);
+            void addLegend(const ScalarGrid* grid, ColorMapLegend*& legend, ColorMap*& map, const Component component);
             void removeLegend(ColorMapLegend*& legend, ColorMap*& map);
     };
 }

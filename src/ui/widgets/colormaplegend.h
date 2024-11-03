@@ -16,15 +16,19 @@ namespace Gui
 
             ColorMap* colorMap = nullptr;
             std::string numberFormat = "{: .2f}";
+            std::string title = "Legend";
 
         public:
-            ColorMapLegend(QWidget* parent, ColorMap *colorMap);
+            ColorMapLegend(QWidget* parent, ColorMap* colorMap);
 
             const ColorMap& getColorMap() const;
             ColorMap& colorMapRef();
 
             std::string getNumberFormat() const;
             void setNumberFormat(const std::string& newNumberFormat);
+
+            std::string getTitle() const;
+            void setTitle(const std::string &newTitle);
 
         public slots:
             void paintEvent(QPaintEvent* paintEvent);
