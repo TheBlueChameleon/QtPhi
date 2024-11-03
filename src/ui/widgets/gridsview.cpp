@@ -1,7 +1,10 @@
+#include <string>
+
 #include "base/errors.h"
 
 #include "gridsview.h"
 
+using namespace std::string_literals;
 using namespace Base;
 
 namespace Gui
@@ -32,37 +35,43 @@ namespace Gui
         delete scene;
     }
 
-    void GridsView::setTilesGrid(const ScalarGrid* newTilesGrid)
+    void GridsView::setTilesGrid(const ScalarGrid* newTilesGrid, const std::string& title)
     {
         tilesGrid = newTilesGrid;
-        update(newTilesGrid, Component::Tiles);
+        update(newTilesGrid, Component::Tiles, title);
     }
 
-    void GridsView::setDotsGrid(const ScalarGrid* newDotsGrid)
+    void GridsView::setDotsGrid(const ScalarGrid* newDotsGrid, const std::string& title)
     {
         dotsGrid = newDotsGrid;
-        update(newDotsGrid, Component::Dots);
+        update(newDotsGrid, Component::Dots, title);
     }
 
-    void GridsView::setArrowsGrid(const VectorGrid* newArrowsGrid)
+    void GridsView::setArrowsGrid(const VectorGrid* newArrowsGrid, const std::string& title)
     {
         arrowsGrid = newArrowsGrid;
+        update(newArrowsGrid, Component::Arrows, title);
     }
 
-    void GridsView::update(const ScalarGrid* grid, const Component component)
+    void GridsView::update(const Grid* grid, const Component component, const std::string& title)
     {
         switch (component)
         {
             case Component::Tiles:
-                updateLegend(grid, tilesLegend, tilesMap, component);
+                updateLegend(grid, tilesLegend, tilesMap, component, title);
                 break;
             case Component::Dots:
-                updateLegend(grid, dotsLegend, dotsMap, component);
+                updateLegend(grid, dotsLegend, dotsMap, component, title);
                 break;
             case Component::Arrows:
+                updateLegend(grid, arrowsLegend, arrowsMap, component, title);
                 break;
             default:
-                break;
+                throw IllegalStateError(
+                    "GridsView::update: unknown handling for component type "s +
+                    std::to_string(static_cast<int>(component)) +
+                    " with ScalarGrid"
+                );
         }
 
         updateScene();
@@ -76,8 +85,13 @@ namespace Gui
                 return LerpColorMap::ColorScheme::blueToRed;
             case Component::Dots:
                 return LerpColorMap::ColorScheme::cyanToYellow;
+            case Component::Arrows:
+                return LerpColorMap::ColorScheme::blackToWhite;
             default:
-                throw IllegalStateError("No ColorScheme defined for GridsView component");
+                throw IllegalStateError(
+                    "No ColorScheme defined for GridsView component "s +
+                    std::to_string(static_cast<int>(component))
+                );
         }
     }
 
@@ -119,7 +133,7 @@ namespace Gui
 
     }
 
-    void GridsView::updateLegend(const ScalarGrid* grid, ColorMapLegend*& legend, ColorMap*& map, const Component component)
+    void GridsView::updateLegend(const Grid* grid, ColorMapLegend*& legend, ColorMap*& map, const Component component, const std::string& title)
     {
         if (grid == nullptr || legend != nullptr)
         {
@@ -128,26 +142,18 @@ namespace Gui
 
         if (grid != nullptr)
         {
-            addLegend(grid, legend, map, component);
+            addLegend(grid, legend, map, component, title);
         }
     }
 
-    void GridsView::addLegend(const ScalarGrid* grid, ColorMapLegend*& legend, ColorMap*& map, const Component component)
+    void GridsView::addLegend(const Grid* grid, ColorMapLegend*& legend, ColorMap*& map, const Component component, const std::string& title)
     {
-        const auto [min, max] = grid->getValuesRange();
+        const auto [min, max] = grid->getAmplitudeRange();
         const auto colorScheme = colorSchemeForComponent(component);
 
         map = new LerpColorMap(min, max, colorScheme);
         legend = new ColorMapLegend(nullptr, map);
-        switch (component)
-        {
-            case Component::Tiles:
-                legend->setTitle("El. Potential");
-                break;
-            case Component::Dots:
-                legend->setTitle("Magnetic Field");
-                break;
-        }
+        legend->setTitle(title);
         legendsLayout->addWidget(legend);
     }
 

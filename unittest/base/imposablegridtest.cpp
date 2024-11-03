@@ -13,7 +13,7 @@ void ImposableGridTest::clipping()
     const auto imposer = ImposableGrid<Real>(imposerDimensions, gridConstant);
 
     const auto targetDimensions = PixelRect(-2, -2, 5, 5);
-    const auto target = BaseGrid<Real>(targetDimensions, gridConstant);
+    const auto target = GridImpl<Real>(targetDimensions, gridConstant);
 
     const auto at_within = PixelCoordinate(+0, +0);
     const auto at_loClip = PixelCoordinate(-2, -2);
@@ -74,8 +74,8 @@ void ImposableGridTest::impose()
     auto imposerVector = ImposableGrid<Vector>(imposerDimensions, gridConstant);
 
     const auto targetDimensions = PixelRect(-2, -2, 5, 5);
-    auto targetScalar = BaseGrid<Scalar>(targetDimensions, gridConstant);
-    auto targetVector = BaseGrid<Vector>(targetDimensions, gridConstant);
+    auto targetScalar = GridImpl<Scalar>(targetDimensions, gridConstant);
+    auto targetVector = GridImpl<Vector>(targetDimensions, gridConstant);
 
     const auto at = PixelCoordinate(+0, +0);
     const auto v0 = RealCoordinate(0, 0);

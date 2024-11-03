@@ -23,6 +23,10 @@ namespace Gui
                 addStop(min, QColor("cyan"));
                 addStop(max, QColor("yellow"));
                 break;
+            case ColorScheme::blackToWhite:
+                addStop(min, QColor("black"));
+                addStop(max, QColor("white"));
+                break;
         }
     }
 

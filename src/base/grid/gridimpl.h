@@ -1,14 +1,16 @@
-#ifndef BASEGRID_H
-#define BASEGRID_H
+#ifndef GRIDIMPL_H
+#define GRIDIMPL_H
 
 #include <vector>
 
 #include "base/geometry/rect.h"
 
+#include "grid.h"
+
 namespace Base
 {
     template<ScalarOrVector T>
-    class BaseGrid
+    class GridImpl : public virtual Grid
     {
         public:
             enum class InterpolationMethod
@@ -17,7 +19,7 @@ namespace Base
             };
             struct InterpolationData
             {
-                BaseGrid<T>::InterpolationMethod interpolationMethod;
+                GridImpl<T>::InterpolationMethod interpolationMethod;
                 PixelCoordinate p1;
                 PixelCoordinate p2;
             };
@@ -28,7 +30,7 @@ namespace Base
             std::vector<T>  values;
 
         public:
-            BaseGrid(const PixelRect& dimensions, const Real gridConstant);
+            GridImpl(const PixelRect& dimensions, const Real gridConstant);
 
             const PixelRect& getPixelDimensions() const;
             RealRect         getRealDimensions() const;
@@ -49,12 +51,14 @@ namespace Base
 
             const T& get(const PixelCoordinate& coordinate) const;
             const T  get(const RealCoordinate& coordinate) const;
-            BaseGrid<T>::InterpolationData getInterpolationData(const RealCoordinate& coordinate) const;
+            GridImpl<T>::InterpolationData getInterpolationData(const RealCoordinate& coordinate) const;
 
-            const RangeType<T> getValuesRange() const;
+            RangeType<Real> getAmplitudeRange() const;
+            RangeType<T> getValuesRange() const;
 
             const std::vector<T>& exposeValues() const;
+
     };
 }
 
-#endif // BASEGRID_H
+#endif // GRIDIMPL_H

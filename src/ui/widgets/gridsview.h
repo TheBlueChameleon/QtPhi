@@ -6,7 +6,7 @@
 #include <QWidget>
 
 #include "base/concepts.h"
-#include "base/grid/basegrid.h"
+#include "base/grid/gridimpl.h"
 
 #include "ui/colormap/lerpcolormap.h"
 
@@ -20,8 +20,8 @@ namespace Gui
             template<Base::ScalarOrVector T>
             class BaseGrid;
 
-            using ScalarGrid = Base::BaseGrid<Base::Scalar>;
-            using VectorGrid = Base::BaseGrid<Base::Vector>;
+            using ScalarGrid = Base::GridImpl<Base::Scalar>;
+            using VectorGrid = Base::GridImpl<Base::Vector>;
 
         private:
             Q_OBJECT
@@ -41,21 +41,23 @@ namespace Gui
             ColorMapLegend* tilesLegend = nullptr;
             ColorMap* dotsMap = nullptr;
             ColorMapLegend* dotsLegend = nullptr;
+            ColorMap* arrowsMap = nullptr;
+            ColorMapLegend* arrowsLegend = nullptr;
 
         public:
             explicit GridsView(QWidget* parent = nullptr);
             ~GridsView();
 
-            void setTilesGrid(const  ScalarGrid* tilesGrid);
-            void setDotsGrid(const   ScalarGrid* dotsGrid);
-            void setArrowsGrid(const VectorGrid* arrowsGrid);
+            void setTilesGrid(const  ScalarGrid* tilesGrid, const  std::string& title);
+            void setDotsGrid(const   ScalarGrid* dotsGrid, const   std::string& title);
+            void setArrowsGrid(const VectorGrid* arrowsGrid, const std::string& title);
 
         signals:
 
         private:
             enum class Component {Tiles, Dots, Arrows};
 
-            void update(const ScalarGrid* grid, const Component component);
+            void update(const Base::Grid* grid, const Component component, const std::string& title);
             LerpColorMap::ColorScheme colorSchemeForComponent(const Component component);
 
             void updateScene();
@@ -63,8 +65,8 @@ namespace Gui
             void updateSceneDots();
             void updateSceneArrows();
 
-            void updateLegend(const ScalarGrid* grid, ColorMapLegend*& legend, ColorMap*& map, const Component component);
-            void addLegend(const ScalarGrid* grid, ColorMapLegend*& legend, ColorMap*& map, const Component component);
+            void updateLegend(const Base::Grid* grid, ColorMapLegend*& legend, ColorMap*& map, const Component component, const std::string& title);
+            void addLegend(const Base::Grid* grid, ColorMapLegend*& legend, ColorMap*& map, const Component component, const std::string& title);
             void removeLegend(ColorMapLegend*& legend, ColorMap*& map);
     };
 }

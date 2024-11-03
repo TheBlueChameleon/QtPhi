@@ -13,7 +13,8 @@ namespace Gui
             enum class ColorScheme
             {
                 blueToRed,
-                cyanToYellow
+                cyanToYellow,
+                blackToWhite
             };
 
             using ColorMapPointsType = std::map<Base::Real, QColor>;

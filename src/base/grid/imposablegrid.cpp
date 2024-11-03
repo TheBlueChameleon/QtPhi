@@ -5,7 +5,7 @@ namespace Base
 {
     template<ScalarOrVector T>
     Base::ImposableGrid<T>::ImposableGrid(const PixelRect& dimensions, const Real gridConstant) :
-        BaseGrid<T>(dimensions, gridConstant)
+        GridImpl<T>(dimensions, gridConstant)
     {}
 
     PixelCoordinate clipToPositive(const PixelCoordinate& p)
@@ -17,7 +17,7 @@ namespace Base
     }
 
     template<ScalarOrVector T>
-    PixelRect ImposableGrid<T>::getSrcRect(const BaseGrid<T>& targetGrid, const PixelCoordinate& at) const
+    PixelRect ImposableGrid<T>::getSrcRect(const GridImpl<T>& targetGrid, const PixelCoordinate& at) const
     {
         const auto targetDimensions = targetGrid.getPixelDimensions();
 
@@ -35,13 +35,13 @@ namespace Base
     }
 
     template<ScalarOrVector T>
-    PixelRect ImposableGrid<T>::getSrcRect(const BaseGrid<T>& targetGrid, const RealCoordinate& at) const
+    PixelRect ImposableGrid<T>::getSrcRect(const GridImpl<T>& targetGrid, const RealCoordinate& at) const
     {
         return getSrcRect(targetGrid, at.toPixelCoordinate(this->gridConstant));
     }
 
     template<ScalarOrVector T>
-    void ImposableGrid<T>::impose(BaseGrid<T>& targetGrid, const PixelCoordinate at) const
+    void ImposableGrid<T>::impose(GridImpl<T>& targetGrid, const PixelCoordinate at) const
     {
         const auto srcRect = getSrcRect(targetGrid, at);
         if      constexpr(std::same_as<T, Scalar>)
@@ -59,7 +59,7 @@ namespace Base
     }
 
     template<ScalarOrVector T>
-    void ImposableGrid<T>::impose(BaseGrid<T>& targetGrid, const RealCoordinate at) const
+    void ImposableGrid<T>::impose(GridImpl<T>& targetGrid, const RealCoordinate at) const
     {
         impose(targetGrid, at.toPixelCoordinate(this->gridConstant));
     }
@@ -67,7 +67,7 @@ namespace Base
     // ====================================================================== //
     // non class methods
 
-    void imposeScalar(BaseGrid<Scalar>& targetGrid, const BaseGrid<Scalar>& sourceGrid, const PixelCoordinate at, const PixelRect& srcRect)
+    void imposeScalar(GridImpl<Scalar>& targetGrid, const GridImpl<Scalar>& sourceGrid, const PixelCoordinate at, const PixelRect& srcRect)
     {
 #ifdef ENABLE_AVX
         throw std::runtime_error("AVX ACCELERATION not implemented yet");
@@ -80,7 +80,7 @@ namespace Base
 #endif
     }
 
-    void imposeVector(BaseGrid<Vector>& targetGrid, const BaseGrid<Vector>& sourceGrid, const PixelCoordinate at, const PixelRect& srcRect)
+    void imposeVector(GridImpl<Vector>& targetGrid, const GridImpl<Vector>& sourceGrid, const PixelCoordinate at, const PixelRect& srcRect)
     {
 #ifdef ENABLE_AVX
         throw std::runtime_error("AVX ACCELERATION not implemented yet");

@@ -3,7 +3,7 @@
 
 #include <QMainWindow>
 
-#include "base/grid/basegrid.h"
+#include "base/grid/gridimpl.h"
 
 #include "ui/widgets/gridsview.h"
 
@@ -14,9 +14,9 @@ namespace Gui
         private:
             Q_OBJECT
 
-            Base::BaseGrid<Base::Scalar> tilesGrid;
-            Base::BaseGrid<Base::Scalar> dotsGrid;
-            Base::BaseGrid<Base::Vector> arrowGrid;
+            Base::GridImpl<Base::Scalar> tilesGrid;
+            Base::GridImpl<Base::Scalar> dotsGrid;
+            Base::GridImpl<Base::Vector> arrowGrid;
 
             GridsView* gridsView;
 

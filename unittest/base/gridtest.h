@@ -1,10 +1,10 @@
-#ifndef BASEGRIDTEST_H
-#define BASEGRIDTEST_H
+#ifndef GRIDTEST_H
+#define GRIDTEST_H
 
 #include <QObject>
 #include <QTest>
 
-class BaseGridTest : public QObject
+class GridTest : public QObject
 {
         Q_OBJECT
 
@@ -17,4 +17,4 @@ class BaseGridTest : public QObject
         void minMax();
 };
 
-#endif // BASEGRIDTEST_H
+#endif // GRIDTEST_H

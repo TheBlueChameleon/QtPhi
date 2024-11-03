@@ -8,9 +8,9 @@ namespace Gui
 {
     MainWindow::MainWindow(QWidget* parent):
         QMainWindow{parent},
-        tilesGrid(BaseGrid<Scalar>(PixelRect(-16, -8, 32, 16), 1.0)),
-        dotsGrid(BaseGrid<Scalar>(PixelRect(-16, -8, 32, 16), 1.0)),
-        arrowGrid(BaseGrid<Vector>(PixelRect(-16, -8, 32, 16), 1.0))
+        tilesGrid(GridImpl<Scalar>(PixelRect(-16, -8, 32, 16), 1.0)),
+        dotsGrid(GridImpl<Scalar>(PixelRect(-16, -8, 32, 16), 1.0)),
+        arrowGrid(GridImpl<Vector>(PixelRect(-16, -8, 32, 16), 1.0))
     {
         for (const auto point: tilesGrid.getPixelDimensions())
         {
@@ -21,8 +21,9 @@ namespace Gui
 
         gridsView = new GridsView;
         this->setCentralWidget(gridsView);
-        gridsView->setTilesGrid(&tilesGrid);
-        gridsView->setDotsGrid(&dotsGrid);
+        gridsView->setTilesGrid(&tilesGrid, "E");
+        gridsView->setDotsGrid(&dotsGrid, "B");
+        gridsView->setArrowsGrid(&arrowGrid, "F");
     }
 
     MainWindow::~MainWindow()

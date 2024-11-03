@@ -1,11 +1,11 @@
 #ifndef POTENTIALGRID_H
 #define POTENTIALGRID_H
 
-#include "base/grid/basegrid.h"
+#include "base/grid/gridimpl.h"
 
 namespace Physics
 {
-    class PotentialGrid : public Base::BaseGrid<Base::Scalar>
+    class PotentialGrid : public Base::GridImpl<Base::Scalar>
     {
         public:
             PotentialGrid();

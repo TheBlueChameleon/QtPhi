@@ -8,11 +8,11 @@ using namespace Base;
 namespace Physics
 {
     PotentialGrid::PotentialGrid():
-        BaseGrid<Scalar>(PixelRect(), 1.0)
+        GridImpl<Scalar>(PixelRect(), 1.0)
     {}
 
     PotentialGrid::PotentialGrid(const PixelRect& dimensions, Base::Real gridConstant, Base::Real level):
-        BaseGrid<Scalar>(dimensions, gridConstant)
+        GridImpl<Scalar>(dimensions, gridConstant)
     {
         std::fill(values.begin(), values.end(), level);
     }

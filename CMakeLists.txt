@@ -56,7 +56,8 @@ add_library(Phi-base STATIC
     src/base/geometry/coordinate.h          src/base/geometry/coordinate.cpp
     src/base/geometry/rect.h                src/base/geometry/rect.cpp
     src/base/geometry/pixelrectiterator.h   src/base/geometry/pixelrectiterator.cpp
-    src/base/grid/basegrid.h                src/base/grid/basegrid.cpp
+    src/base/grid/grid.h                    src/base/grid/grid.cpp
+    src/base/grid/gridimpl.h                src/base/grid/gridimpl.cpp
     src/base/grid/imposablegrid.h           src/base/grid/imposablegrid.cpp
     src/base/interpolation/interpolation.h  src/base/interpolation/interpolation.cpp
 )
@@ -154,11 +155,11 @@ endif()
 
 add_executable(unittest
     unittest/unittest_main.cpp
-    unittest/base/coordinatetest.h unittest/base/coordinatetest.cpp
-    unittest/base/recttest.h unittest/base/recttest.cpp
-    unittest/base/basegridtest.h unittest/base/basegridtest.cpp
-    unittest/base/imposablegridtest.h unittest/base/imposablegridtest.cpp
-    unittest/base/interpolationtest.h unittest/base/interpolationtest.cpp
+    unittest/base/coordinatetest.h      unittest/base/coordinatetest.cpp
+    unittest/base/recttest.h            unittest/base/recttest.cpp
+    unittest/base/gridtest.h            unittest/base/gridtest.cpp
+    unittest/base/imposablegridtest.h   unittest/base/imposablegridtest.cpp
+    unittest/base/interpolationtest.h   unittest/base/interpolationtest.cpp
 )
 
 target_link_libraries(unittest PRIVATE
