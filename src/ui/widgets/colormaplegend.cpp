@@ -89,8 +89,8 @@ namespace Gui
         {
             const auto coordinateValue = Interpolation::linear(
                                              y,
-                                             yMin, rMin,
-                                             yMax, rMax
+                                             yMin, rMax,    // sic: yMin to rMax: top (lowest) coordinate corresponds to highest value
+                                             yMax, rMin     // dito.
                                          );
             painter.setPen(QPen(colorMap->get(coordinateValue)));
             painter.drawLine(xMin, y, xMax, y);

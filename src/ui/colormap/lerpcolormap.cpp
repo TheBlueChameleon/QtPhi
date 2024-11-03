@@ -72,9 +72,9 @@ namespace Gui
                                 pMax, 1.0
                             );
         auto c = QColor();
-        c.setRed(lambda * cMin.red() + (1 - lambda) * cMax.red());
-        c.setGreen(lambda * cMin.green() + (1 - lambda) * cMax.green());
-        c.setBlue(lambda * cMin.blue() + (1 - lambda) * cMax.blue());
+        c.setRed((1 - lambda) * cMin.red() + lambda * cMax.red());
+        c.setGreen((1 - lambda) * cMin.green() + lambda * cMax.green());
+        c.setBlue((1 - lambda) * cMin.blue() + lambda * cMax.blue());
 
         return c;
     }
