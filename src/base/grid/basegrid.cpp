@@ -1,4 +1,5 @@
-#include <iostream>
+#include <algorithm>
+#include <ranges>
 
 #include "base/errors.h"
 #include "base/interpolation/interpolation.h"
@@ -189,6 +190,25 @@ namespace Base
         }
 
         return IPD(IPM::Planar, anchor, p4);
+    }
+
+    template<ScalarOrVector T>
+    const RangeType<T> BaseGrid<T>::getValuesRange() const
+    {
+        auto prj = [](T element)
+        {
+            if constexpr(std::is_same<T, Scalar>::value)
+            {
+                return element;
+            }
+            else
+            {
+                return element.length();
+            }
+        };
+
+        return std::ranges::minmax(values, {}, prj);
+
     }
 
     template<ScalarOrVector T>

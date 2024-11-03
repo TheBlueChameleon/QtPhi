@@ -3,7 +3,9 @@
 
 #include <QMainWindow>
 
-#include "ui/widgets/colormaplegend.h"
+#include "base/grid/basegrid.h"
+
+#include "ui/widgets/gridsview.h"
 
 namespace Gui
 {
@@ -12,8 +14,11 @@ namespace Gui
         private:
             Q_OBJECT
 
-            ColorMap* cmap;
-            ColorMapLegend* cmapLegend;
+            Base::BaseGrid<Base::Scalar> tilesGrid;
+            Base::BaseGrid<Base::Scalar> dotsGrid;
+            Base::BaseGrid<Base::Vector> arrowGrid;
+
+            GridsView* gridsView;
 
         public:
             explicit MainWindow(QWidget* parent = nullptr);

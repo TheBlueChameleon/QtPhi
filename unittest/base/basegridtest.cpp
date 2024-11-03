@@ -127,3 +127,24 @@ void BaseGridTest::boundaryInterpolation()
         QCOMPARE(grid.get(p), 5.0);
     }
 }
+
+void BaseGridTest::minMax()
+{
+    const auto dimension = PixelRect(-2, -2, 5, 5);
+    auto grid = BaseGrid<Real>(dimension, 1.0);
+
+    grid[PixelCoordinate(+1, +2)] = +1;
+    grid[PixelCoordinate(+2, +2)] = +2;
+    grid[PixelCoordinate(+1, +1)] = +3;
+    grid[PixelCoordinate(+2, +1)] = +4;
+
+    grid[PixelCoordinate(-1, -2)] = -1;
+    grid[PixelCoordinate(-2, -2)] = -2;
+    grid[PixelCoordinate(-1, -1)] = -3;
+    grid[PixelCoordinate(-2, -1)] = -4;
+
+    const auto range = grid.getValuesRange();
+
+    QCOMPARE(range.min, -4.0);
+    QCOMPARE(range.max, +4.0);
+}

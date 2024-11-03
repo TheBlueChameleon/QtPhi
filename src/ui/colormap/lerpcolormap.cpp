@@ -19,6 +19,10 @@ namespace Gui
                 addStop(min, QColor("blue"));
                 addStop(max, QColor("red"));
                 break;
+            case ColorScheme::cyanToYellow:
+                addStop(min, QColor("cyan"));
+                addStop(max, QColor("yellow"));
+                break;
         }
     }
 
@@ -43,9 +47,9 @@ namespace Gui
         return (--points.end())->first;
     }
 
-    std::pair<Base::Real, Base::Real> LerpColorMap::getRange() const
+    RangeType<Real> LerpColorMap::getRange() const
     {
-        return std::make_pair(
+        return RangeType<Real>(
                    points.begin()->first,
                    (--points.end())->first
                );

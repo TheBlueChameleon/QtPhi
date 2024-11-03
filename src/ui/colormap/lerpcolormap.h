@@ -12,7 +12,8 @@ namespace Gui
         public:
             enum class ColorScheme
             {
-                blueToRed
+                blueToRed,
+                cyanToYellow
             };
 
             using ColorMapPointsType = std::map<Base::Real, QColor>;
@@ -30,7 +31,7 @@ namespace Gui
             // ColorMap interface
             Base::Real getMin() const;
             Base::Real getMax() const;
-            std::pair<Base::Real, Base::Real> getRange() const;
+            Base::RangeType<Base::Real> getRange() const;
 
             bool contains(Base::Real value) const;
             QColor get(const Base::Real at) const;

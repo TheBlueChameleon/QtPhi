@@ -14,6 +14,7 @@ class BaseGridTest : public QObject
         void dataAccess();
         void interpolation();
         void boundaryInterpolation();
+        void minMax();
 };
 
 #endif // BASEGRIDTEST_H

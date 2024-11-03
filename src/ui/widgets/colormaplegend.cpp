@@ -24,7 +24,7 @@ namespace Gui
     ColorMapLegend::ColorMapLegend(QWidget* parent, ColorMap* colorMap):
         QWidget(parent), colorMap(colorMap)
     {
-        this->setMinimumSize(QSize(50, 100));
+        this->setMinimumSize(QSize(80, 100));
     }
 
     const ColorMap& ColorMapLegend::getColorMap() const

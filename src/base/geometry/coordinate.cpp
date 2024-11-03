@@ -1,3 +1,5 @@
+#include <cmath>
+
 #include "coordinate.h"
 
 namespace Base
@@ -115,6 +117,12 @@ namespace Base
                    std::max(lhs.x, rhs.x),
                    std::max(lhs.y, rhs.y)
                );
+    }
+
+    template<PixelOrReal T>
+    Real Coordinate<T>::length() const
+    {
+        return std::hypot(x, y);
     }
 
     template<PixelOrReal T>

@@ -14,7 +14,7 @@ namespace Gui
         public:
             virtual Base::Real getMin() const = 0;
             virtual Base::Real getMax() const = 0;
-            virtual std::pair<Base::Real, Base::Real> getRange() const = 0;
+            virtual Base::RangeType<Base::Real> getRange() const = 0;
 
             virtual bool contains(Base::Real value) const = 0;
             virtual QColor get(const Base::Real at) const = 0;

@@ -35,6 +35,8 @@ namespace Base
 
         static Coordinate<T> min(const Coordinate<T>& lhs, const Coordinate<T>& rhs);
         static Coordinate<T> max(const Coordinate<T>& lhs, const Coordinate<T>& rhs);
+
+        Real length() const;
     };
 
     template<PixelOrReal T>

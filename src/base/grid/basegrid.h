@@ -51,6 +51,8 @@ namespace Base
             const T  get(const RealCoordinate& coordinate) const;
             BaseGrid<T>::InterpolationData getInterpolationData(const RealCoordinate& coordinate) const;
 
+            const RangeType<T> getValuesRange() const;
+
             const std::vector<T>& exposeValues() const;
     };
 }

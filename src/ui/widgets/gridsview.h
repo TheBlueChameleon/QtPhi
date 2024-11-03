@@ -2,32 +2,64 @@
 #define GRIDSVIEW_H
 
 #include <QGraphicsView>
+#include <QHBoxLayout>
 #include <QWidget>
 
+#include "base/concepts.h"
 #include "base/grid/basegrid.h"
+
+#include "ui/colormap/lerpcolormap.h"
+
+#include "colormaplegend.h"
 
 namespace Gui
 {
     class GridsView : public QWidget
     {
         public:
+            template<Base::ScalarOrVector T>
+            class BaseGrid;
+
             using ScalarGrid = Base::BaseGrid<Base::Scalar>;
             using VectorGrid = Base::BaseGrid<Base::Vector>;
 
         private:
             Q_OBJECT
 
-            ScalarGrid* squareColorGrid = nullptr;
-            ScalarGrid* dotsGrid = nullptr;
-            VectorGrid* arrowsGrid = nullptr;
+            const ScalarGrid* tilesGrid = nullptr;
+            const ScalarGrid* dotsGrid = nullptr;
+            const VectorGrid* arrowsGrid = nullptr;
 
-            QGraphicsView* gfxView;
+            QHBoxLayout* mainLayout;
+            QVBoxLayout* legendsLayout;
+
             QGraphicsScene* scene;
+            QGraphicsView* gfxView;
+
+            QWidget* legendsSpace;
+            ColorMap* tilesMap = nullptr;
+            ColorMapLegend* tilesLegend = nullptr;
+            ColorMap* dotsMap = nullptr;
+            ColorMapLegend* dotsLegend = nullptr;
 
         public:
             explicit GridsView(QWidget* parent = nullptr);
+            ~GridsView();
+
+            void setTilesGrid(const  ScalarGrid* tilesGrid);
+            void setDotsGrid(const   ScalarGrid* dotsGrid);
+            void setArrowsGrid(const VectorGrid* arrowsGrid);
 
         signals:
+
+        private:
+            enum class Component {Tiles, Dots, Arrows};
+
+            void update(const ScalarGrid* grid, const Component component);
+
+            void updateLegend(const ScalarGrid* grid, ColorMapLegend*& legend, ColorMap*& map, const LerpColorMap::ColorScheme colorScheme);
+            void addLegend(const ScalarGrid* grid, ColorMapLegend*& legend, ColorMap*& map, const LerpColorMap::ColorScheme colorScheme);
+            void removeLegend(ColorMapLegend*& legend, ColorMap*& map);
     };
 }
 
