@@ -26,11 +26,11 @@ namespace Base
 
         protected:
             PixelRect       dimensions;
-            Real            gridConstant;
             std::vector<T>  values;
 
         public:
-            GridImpl(const PixelRect& dimensions, const Real gridConstant);
+            GridImpl(const PixelRect& dimensions);
+            GridImpl(const RealRect& dimensions);
 
             const PixelRect& getPixelDimensions() const;
             RealRect         getRealDimensions() const;

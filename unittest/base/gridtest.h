@@ -9,7 +9,6 @@ class GridTest : public QObject
         Q_OBJECT
 
     private slots:
-        void ctor();
         void getDimensionData();
         void dataAccess();
         void interpolation();

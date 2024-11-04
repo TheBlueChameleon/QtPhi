@@ -10,7 +10,8 @@ namespace Base
     class ImposableGrid : public GridImpl<T>
     {
         public:
-            ImposableGrid(const PixelRect& dimensions, const Real gridConstant);
+            ImposableGrid(const PixelRect& dimensions);
+            ImposableGrid(const RealRect& dimensions);
 
             PixelRect getSrcRect(const GridImpl<T>& targetGrid, const PixelCoordinate& at) const;
             PixelRect getSrcRect(const GridImpl<T>& targetGrid, const RealCoordinate& at) const;

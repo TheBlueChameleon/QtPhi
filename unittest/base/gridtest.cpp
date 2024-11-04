@@ -7,21 +7,11 @@
 
 using namespace Base;
 
-void GridTest::ctor()
-{
-    const auto r = PixelRect();
-
-    QVERIFY_THROWS_EXCEPTION(
-        DimensionError,
-        GridImpl<Real>(r, 0)
-    );
-}
-
 void GridTest::getDimensionData()
 {
     const Real gridConstant = 2.0;
-    const auto r = PixelRect(-1, -2, 3, 4, 1.0);
-    const auto g = GridImpl<Real>(r, gridConstant);
+    const auto r = PixelRect(-1, -2, 3, 4, gridConstant);
+    const auto g = GridImpl<Real>(r);
 
     QCOMPARE(g.getGridConstant(), gridConstant);
     QCOMPARE(g.getPixelSize(),   PixelCoordinate(3, 4));
@@ -34,7 +24,7 @@ void GridTest::getDimensionData()
 void GridTest::dataAccess()
 {
     const auto dimension = PixelRect(-1, -2, 3, 4, 1.0);
-    auto grid = GridImpl<Real>(dimension, 1.0);
+    auto grid = GridImpl<Real>(dimension);
 
     for (const auto& c: grid.getPixelDimensions())
     {
@@ -74,7 +64,7 @@ void GridTest::interpolation()
      */
 
     const auto dimension = PixelRect(-2, -2, 5, 5, 1.0);
-    auto grid = GridImpl<Real>(dimension, 1.0);
+    auto grid = GridImpl<Real>(dimension);
 
     grid[PixelCoordinate(+1, +2)] = 1;
     grid[PixelCoordinate(+2, +2)] = 2;
@@ -96,7 +86,7 @@ void GridTest::interpolation()
 void GridTest::boundaryInterpolation()
 {
     const auto dimension = PixelRect(-2, -2, 5, 5, 1.0);
-    auto grid = GridImpl<Real>(dimension, 1.0);
+    auto grid = GridImpl<Real>(dimension);
 
     grid[PixelCoordinate(+2, +0)] = 5;
     grid[PixelCoordinate(-2, +0)] = 5;
@@ -131,7 +121,7 @@ void GridTest::boundaryInterpolation()
 void GridTest::minMax()
 {
     const auto dimension = PixelRect(-2, -2, 5, 5, 1.0);
-    auto grid = GridImpl<Real>(dimension, 1.0);
+    auto grid = GridImpl<Real>(dimension);
 
     grid[PixelCoordinate(+1, +2)] = +1;
     grid[PixelCoordinate(+2, +2)] = +2;

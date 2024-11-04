@@ -33,6 +33,16 @@ void RectTest::ctor()
 
     QVERIFY_THROWS_EXCEPTION(
         DimensionError,
+        Rect(0, 0, 1, 1, 0.0)
+    );
+
+    QVERIFY_THROWS_EXCEPTION(
+        DimensionError,
+        Rect(0, 0, 1, 1, -1.0)
+    );
+
+    QVERIFY_THROWS_EXCEPTION(
+        DimensionError,
         Rect(0, 0, 0, 0, 1.0)
     );
 

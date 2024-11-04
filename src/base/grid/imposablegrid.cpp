@@ -4,8 +4,13 @@
 namespace Base
 {
     template<ScalarOrVector T>
-    Base::ImposableGrid<T>::ImposableGrid(const PixelRect& dimensions, const Real gridConstant) :
-        GridImpl<T>(dimensions, gridConstant)
+    Base::ImposableGrid<T>::ImposableGrid(const PixelRect& dimensions) :
+        GridImpl<T>(dimensions)
+    {}
+
+    template<ScalarOrVector T>
+    ImposableGrid<T>::ImposableGrid(const RealRect& dimensions) :
+        GridImpl<T>(dimensions)
     {}
 
     PixelCoordinate clipToPositive(const PixelCoordinate& p)
@@ -37,7 +42,7 @@ namespace Base
     template<ScalarOrVector T>
     PixelRect ImposableGrid<T>::getSrcRect(const GridImpl<T>& targetGrid, const RealCoordinate& at) const
     {
-        return getSrcRect(targetGrid, at.toPixelCoordinate(this->gridConstant));
+        return getSrcRect(targetGrid, at.toPixelCoordinate(this->dimensions.gridConstant));
     }
 
     template<ScalarOrVector T>
@@ -61,7 +66,7 @@ namespace Base
     template<ScalarOrVector T>
     void ImposableGrid<T>::impose(GridImpl<T>& targetGrid, const RealCoordinate at) const
     {
-        impose(targetGrid, at.toPixelCoordinate(this->gridConstant));
+        impose(targetGrid, at.toPixelCoordinate(this->dimensions.gridConstant));
     }
 
     // ====================================================================== //

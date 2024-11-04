@@ -16,6 +16,11 @@ namespace Base
             const std::string errMsg = std::format("Negative dimensions encountered: w={}, h={}", r.w, r.h);
             throw DimensionError(errMsg);
         }
+
+        if (r.gridConstant <= 0.0)
+        {
+            throw DimensionError("grid constant equal to or less than zero");
+        }
     }
 
     template<PixelOrReal T>

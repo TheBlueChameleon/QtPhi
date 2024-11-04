@@ -8,16 +8,16 @@
 namespace Base
 {
     template<ScalarOrVector T>
-    GridImpl<T>::GridImpl(const PixelRect& dimensions, const Real gridConstant):
+    GridImpl<T>::GridImpl(const PixelRect& dimensions):
         dimensions(dimensions),
-        gridConstant(gridConstant),
         values(std::vector<T>(dimensions.w * dimensions.h))
-    {
-        if (gridConstant <= 0.0)
-        {
-            throw DimensionError("grid constant equal to or less than zero");
-        }
-    }
+    {}
+
+    template<ScalarOrVector T>
+    GridImpl<T>::GridImpl(const RealRect& dimensions):
+        dimensions(dimensions.toPixelRect()),
+        values(std::vector<T>(dimensions.w * dimensions.h))
+    {}
 
     template<ScalarOrVector T>
     const PixelRect& GridImpl<T>::getPixelDimensions() const
@@ -46,19 +46,19 @@ namespace Base
     template<ScalarOrVector T>
     RealCoordinate GridImpl<T>::getRealOrigin() const
     {
-        return getPixelOrigin().toRealCoordinate(gridConstant);
+        return getPixelOrigin().toRealCoordinate(dimensions.gridConstant);
     }
 
     template<ScalarOrVector T>
     RealCoordinate GridImpl<T>::getRealSize() const
     {
-        return getPixelSize().toRealCoordinate(gridConstant);
+        return getPixelSize().toRealCoordinate(dimensions.gridConstant);
     }
 
     template<ScalarOrVector T>
     Real GridImpl<T>::getGridConstant() const
     {
-        return gridConstant;
+        return dimensions.gridConstant;
     }
 
     template<ScalarOrVector T>
@@ -71,7 +71,7 @@ namespace Base
     template<ScalarOrVector T>
     void GridImpl<T>::setOrigin(const RealCoordinate& origin)
     {
-        setOrigin(origin.toPixelCoordinate(gridConstant));
+        setOrigin(origin.toPixelCoordinate(dimensions.gridConstant));
     }
 
     template<ScalarOrVector T>
@@ -125,8 +125,8 @@ namespace Base
                 {
                     const auto valueLR = get(PixelCoordinate(ipd.p2.x, ipd.p1.y));
                     const auto valueUL = get(PixelCoordinate(ipd.p1.x, ipd.p2.y));
-                    const auto realCoordinateLo = ipd.p1.toRealCoordinate(gridConstant);
-                    const auto realCoordinateHi = ipd.p2.toRealCoordinate(gridConstant);
+                    const auto realCoordinateLo = ipd.p1.toRealCoordinate(dimensions.gridConstant);
+                    const auto realCoordinateHi = ipd.p2.toRealCoordinate(dimensions.gridConstant);
                     return Interpolation::planar(coordinate,
                                                  realCoordinateLo, realCoordinateHi,
                                                  valueLo, valueLR,
@@ -156,7 +156,7 @@ namespace Base
         using IPD = GridImpl<T>::InterpolationData;
         using IPM = GridImpl<T>::InterpolationMethod;
 
-        const auto anchor = coordinate.toPixelCoordinate(gridConstant);
+        const auto anchor = coordinate.toPixelCoordinate(dimensions.gridConstant);
         const auto maxCoords = dimensions.getMax();
 
         // safety override: p2..p4 not within the grid

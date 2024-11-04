@@ -9,11 +9,11 @@ using namespace Base;
 void ImposableGridTest::clipping()
 {
     const Real gridConstant = 2.0;
-    const auto imposerDimensions = PixelRect(-1, -1, 3, 3, 1.0);
-    const auto imposer = ImposableGrid<Real>(imposerDimensions, gridConstant);
+    const auto imposerDimensions = PixelRect(-1, -1, 3, 3, gridConstant);
+    const auto imposer = ImposableGrid<Real>(imposerDimensions);
 
-    const auto targetDimensions = PixelRect(-2, -2, 5, 5, 1.0);
-    const auto target = GridImpl<Real>(targetDimensions, gridConstant);
+    const auto targetDimensions = PixelRect(-2, -2, 5, 5, gridConstant);
+    const auto target = GridImpl<Real>(targetDimensions);
 
     const auto at_within = PixelCoordinate(+0, +0);
     const auto at_loClip = PixelCoordinate(-2, -2);
@@ -34,7 +34,7 @@ void ImposableGridTest::clipping()
      */
     QCOMPARE(
         imposer.getSrcRect(target, at_within),
-        PixelRect(-1, -1, 3, 3, 1.0)
+        PixelRect(-1, -1, 3, 3, gridConstant)
     );
 
     /* SCENARIO 2: CLIP OUT LOW COORDINATES
@@ -48,7 +48,7 @@ void ImposableGridTest::clipping()
      */
     QCOMPARE(
         imposer.getSrcRect(target, at_loClip),
-        PixelRect(0, 0, 2, 2, 1.0)
+        PixelRect(0, 0, 2, 2, gridConstant)
     );
 
     /* SCENARIO 2: CLIP OUT HIGH COORDINATES
@@ -62,20 +62,20 @@ void ImposableGridTest::clipping()
      */
     QCOMPARE(
         imposer.getSrcRect(target, at_hiClip),
-        PixelRect(-1, -1, 2, 2, 1.0)
+        PixelRect(-1, -1, 2, 2, gridConstant)
     );
 }
 
 void ImposableGridTest::impose()
 {
     const Real gridConstant = 2.0;
-    const auto imposerDimensions = PixelRect(-1, -1, 3, 3, 1.0);
-    auto imposerScalar = ImposableGrid<Scalar>(imposerDimensions, gridConstant);
-    auto imposerVector = ImposableGrid<Vector>(imposerDimensions, gridConstant);
+    const auto imposerDimensions = PixelRect(-1, -1, 3, 3, gridConstant);
+    auto imposerScalar = ImposableGrid<Scalar>(imposerDimensions);
+    auto imposerVector = ImposableGrid<Vector>(imposerDimensions);
 
-    const auto targetDimensions = PixelRect(-2, -2, 5, 5, 1.0);
-    auto targetScalar = GridImpl<Scalar>(targetDimensions, gridConstant);
-    auto targetVector = GridImpl<Vector>(targetDimensions, gridConstant);
+    const auto targetDimensions = PixelRect(-2, -2, 5, 5, gridConstant);
+    auto targetScalar = GridImpl<Scalar>(targetDimensions);
+    auto targetVector = GridImpl<Vector>(targetDimensions);
 
     const auto at = PixelCoordinate(+0, +0);
     const auto v0 = RealCoordinate(0, 0);

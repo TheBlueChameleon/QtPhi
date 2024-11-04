@@ -72,7 +72,6 @@ endif()
 add_library(Phi-physics STATIC
     src/physics/physics.h
     src/physics/gridfactory.h src/physics/gridfactory.cpp
-    src/physics/potential/potentialgrid.h src/physics/potential/potentialgrid.cpp
 )
 
 if (ENABLE_AVX)
@@ -113,7 +112,6 @@ endif()
 
 target_link_libraries(Phi-gui PRIVATE
     Phi-base
-
     Qt${QT_VERSION_MAJOR}::Widgets
 )
 
@@ -121,7 +119,6 @@ target_link_libraries(Phi-main PRIVATE
     Phi-base
     Phi-physics
     Phi-gui
-
     Qt${QT_VERSION_MAJOR}::Widgets
 )
 
@@ -164,16 +161,8 @@ add_executable(unittest
 
 target_link_libraries(unittest PRIVATE
     Phi-base
-
     Qt6::Core
     Qt6::Gui
     Qt6::Test
     Qt6::Widgets
 )
-
-# ............................................................................ #
-# static assert test files
-
-# add_executable(unittest_failToCompile
-#     unittest/assertFailToCompile.cpp
-# )
