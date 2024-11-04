@@ -14,6 +14,7 @@ namespace Base
     template<PixelOrReal T>
     RectIterator<T>& RectIterator<T>::operator++()
     {
+        const auto rect = Rect(x, y, w, h, gridConstant);
         if constexpr(std::is_integral<T>::value)
         {
             ++currentCoordinate.x;
@@ -23,7 +24,7 @@ namespace Base
             currentCoordinate.x += gridConstant;
         }
 
-        if (currentCoordinate.x >= x + w)
+        if (!rect.contains(currentCoordinate))
         {
             currentCoordinate.x = x;
             if constexpr(std::is_integral<T>::value)
@@ -36,7 +37,7 @@ namespace Base
             }
         }
 
-        if (currentCoordinate.y >= y + h)
+        if (!rect.contains(currentCoordinate))
         {
             *this = RectIterator();
         }

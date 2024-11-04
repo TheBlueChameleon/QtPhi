@@ -25,17 +25,15 @@ namespace Base
 
         bool contains(Coordinate<T> p) const;
 
-        PixelRect toPixelRect(const Real gridConstant) const;
-        RealRect  toRealRect(const Real gridConstant) const;
+        PixelRect toPixelRect() const;
+        RealRect  toRealRect() const;
 
         bool operator==(const Rect<T>& rhs) const = default;
 
         std::string to_string() const;
 
         RectIterator<T> begin() const;
-
         RectIterator<T> end() const;
-
     };
 }
 #endif // RECT_H

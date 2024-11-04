@@ -1,5 +1,6 @@
 #include <algorithm>
 #include <format>
+#include <iostream>
 
 #include "base/errors.h"
 #include "rectiterator.h"
@@ -87,13 +88,13 @@ namespace Base
     // template specializations
 
     template<>
-    PixelRect Rect<Pixel>::toPixelRect([[maybe_unused]] const Real gridConstant) const
+    PixelRect Rect<Pixel>::toPixelRect() const
     {
         return *this;
     }
 
     template<>
-    PixelRect Rect<Real>::toPixelRect(const Real gridConstant) const
+    PixelRect Rect<Real>::toPixelRect() const
     {
         const auto origin = this->getMin().toPixelCoordinate(gridConstant);
         const auto size   = this->getSize().toPixelCoordinate(gridConstant);
@@ -101,7 +102,7 @@ namespace Base
     }
 
     template<>
-    RealRect Rect<Pixel>::toRealRect(const Real gridConstant) const
+    RealRect Rect<Pixel>::toRealRect() const
     {
         const auto origin = this->getMin().toRealCoordinate(gridConstant);
         const auto size   = this->getSize().toRealCoordinate(gridConstant);
@@ -109,7 +110,7 @@ namespace Base
     }
 
     template<>
-    RealRect Rect<Real>::toRealRect([[maybe_unused]] const Real gridConstant) const
+    RealRect Rect<Real>::toRealRect() const
     {
         return *this;
     }

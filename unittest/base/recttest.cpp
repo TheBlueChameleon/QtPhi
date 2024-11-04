@@ -105,20 +105,19 @@ void RectTest::iterator()
         ++pCount;
         QVERIFY(p.contains(c));
     }
-
     QCOMPARE(pCount, p.w * p.h);
 
     /* grid size is 3.0 x 4.0, so coordinates range from
-     * (-1, -2) (inclusive) to (+2, +2) (exclusive)
+     * (-1, -2) (inclusive) to (+2, +2) (inclusive)
      * # grid points
      * * integer coordinates
      *
      *  (-1,-2)     (+1,-2)  (+2,-2)
      *     #·····+·····#·····+
      *     :           :     :
-     *     #·····+·····#·····+ y=0
+     *     #·····+·····#·····+ y=+0
      *     :           :     :
-     *     (y=2 excluded)
+     *     #·····+·····#·····+ y=+2
      */
     int rCount = 0;
     for (const auto& c: r)
@@ -126,5 +125,5 @@ void RectTest::iterator()
         ++rCount;
         QVERIFY(r.contains(c));
     }
-    QCOMPARE(rCount, 4);
+    QCOMPARE(rCount, 6);
 }

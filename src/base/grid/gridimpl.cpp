@@ -28,7 +28,7 @@ namespace Base
     template<ScalarOrVector T>
     RealRect GridImpl<T>::getRealDimensions() const
     {
-        return dimensions.toRealRect(gridConstant);
+        return dimensions.toRealRect();
     }
 
     template<ScalarOrVector T>
