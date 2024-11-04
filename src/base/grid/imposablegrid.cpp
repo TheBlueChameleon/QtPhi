@@ -31,7 +31,7 @@ namespace Base
         const auto deltaMax = clipToPositive(unclippedMax - clippedMax);
         const auto size = this->getPixelSize() - deltaMin - deltaMax;
 
-        return PixelRect(srcStart.x, srcStart.y, size.x, size.y);
+        return PixelRect(srcStart.x, srcStart.y, size.x, size.y, this->dimensions.gridConstant);
     }
 
     template<ScalarOrVector T>

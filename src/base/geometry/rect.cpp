@@ -2,7 +2,7 @@
 #include <format>
 
 #include "base/errors.h"
-#include "pixelrectiterator.h"
+#include "rectiterator.h"
 #include "rect.h"
 
 namespace Base
@@ -20,19 +20,22 @@ namespace Base
     template<PixelOrReal T>
     Rect<T>::Rect() :
         x(0), y(0),
-        w(1), h(1)
+        w(1), h(1),
+        gridConstant(1)
     {}
 
     template<PixelOrReal T>
-    Rect<T>::Rect(const T x, const T y, const T w, const T h) :
+    Rect<T>::Rect(const T x, const T y, const T w, const T h, Real gridConstant) :
         x(x), y(y),
-        w(w), h(h)
+        w(w), h(h),
+        gridConstant(gridConstant)
     {
         assertPositiveExtent(*this);
     }
 
     template<PixelOrReal T>
-    Rect<T>::Rect(const Coordinate<T>& boundary1, const Coordinate<T>& boundary2)
+    Rect<T>::Rect(const Coordinate<T>& boundary1, const Coordinate<T>& boundary2, Real gridConstant) :
+        gridConstant(gridConstant)
     {
         const auto [x1, x2] = std::minmax(boundary1.x, boundary2.x);
         const auto [y1, y2] = std::minmax(boundary1.y, boundary2.y);
@@ -94,7 +97,7 @@ namespace Base
     {
         const auto origin = this->getMin().toPixelCoordinate(gridConstant);
         const auto size   = this->getSize().toPixelCoordinate(gridConstant);
-        return PixelRect(origin.x, origin.y, size.x, size.y);
+        return PixelRect(origin.x, origin.y, size.x, size.y, gridConstant);
     }
 
     template<>
@@ -102,7 +105,7 @@ namespace Base
     {
         const auto origin = this->getMin().toRealCoordinate(gridConstant);
         const auto size   = this->getSize().toRealCoordinate(gridConstant);
-        return RealRect(origin.x, origin.y, size.x, size.y);
+        return RealRect(origin.x, origin.y, size.x, size.y, gridConstant);
     }
 
     template<>
@@ -121,18 +124,18 @@ namespace Base
 
     template<PixelOrReal T>
     template<class Q>
-    std::enable_if<std::is_integral<Q>::value, const PixelRectIterator>::type
+    std::enable_if<std::is_integral<Q>::value, const RectIterator>::type
     Rect<T>::begin() const
     {
-        return PixelRectIterator(*this);
+        return RectIterator(*this);
     }
 
     template<PixelOrReal T>
     template<class Q>
-    std::enable_if<std::is_integral<Q>::value, const PixelRectIterator>::type
+    std::enable_if<std::is_integral<Q>::value, const RectIterator>::type
     Rect<T>::end() const
     {
-        return PixelRectIterator();
+        return RectIterator();
     }
 
     // ====================================================================== //
@@ -141,6 +144,6 @@ namespace Base
     template struct Rect<Pixel>;
     template struct Rect<Real>;
 
-    template typename std::enable_if<std::is_integral<Pixel>::value, const PixelRectIterator>::type Rect<Pixel>::begin<Pixel>() const;
-    template typename std::enable_if<std::is_integral<Pixel>::value, const PixelRectIterator>::type Rect<Pixel>::end<Pixel>() const;
+    template typename std::enable_if<std::is_integral<Pixel>::value, const RectIterator>::type Rect<Pixel>::begin<Pixel>() const;
+    template typename std::enable_if<std::is_integral<Pixel>::value, const RectIterator>::type Rect<Pixel>::end<Pixel>() const;
 }

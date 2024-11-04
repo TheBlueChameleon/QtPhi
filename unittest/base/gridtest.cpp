@@ -20,7 +20,7 @@ void GridTest::ctor()
 void GridTest::getDimensionData()
 {
     const Real gridConstant = 2.0;
-    const auto r = PixelRect(-1, -2, 3, 4);
+    const auto r = PixelRect(-1, -2, 3, 4, 1.0);
     const auto g = GridImpl<Real>(r, gridConstant);
 
     QCOMPARE(g.getGridConstant(), gridConstant);
@@ -33,7 +33,7 @@ void GridTest::getDimensionData()
 
 void GridTest::dataAccess()
 {
-    const auto dimension = PixelRect(-1, -2, 3, 4);
+    const auto dimension = PixelRect(-1, -2, 3, 4, 1.0);
     auto grid = GridImpl<Real>(dimension, 1.0);
 
     for (const auto& c: grid.getPixelDimensions())
@@ -73,7 +73,7 @@ void GridTest::interpolation()
      *   L = (1.5, 1.00)  l = 3.5
      */
 
-    const auto dimension = PixelRect(-2, -2, 5, 5);
+    const auto dimension = PixelRect(-2, -2, 5, 5, 1.0);
     auto grid = GridImpl<Real>(dimension, 1.0);
 
     grid[PixelCoordinate(+1, +2)] = 1;
@@ -95,7 +95,7 @@ void GridTest::interpolation()
 
 void GridTest::boundaryInterpolation()
 {
-    const auto dimension = PixelRect(-2, -2, 5, 5);
+    const auto dimension = PixelRect(-2, -2, 5, 5, 1.0);
     auto grid = GridImpl<Real>(dimension, 1.0);
 
     grid[PixelCoordinate(+2, +0)] = 5;
@@ -130,7 +130,7 @@ void GridTest::boundaryInterpolation()
 
 void GridTest::minMax()
 {
-    const auto dimension = PixelRect(-2, -2, 5, 5);
+    const auto dimension = PixelRect(-2, -2, 5, 5, 1.0);
     auto grid = GridImpl<Real>(dimension, 1.0);
 
     grid[PixelCoordinate(+1, +2)] = +1;

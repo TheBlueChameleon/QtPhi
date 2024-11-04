@@ -2,11 +2,11 @@
 #define RECT_H
 
 #include "base/geometry/coordinate.h"
-#include "base/geometry/pixelrectiterator.h"
+#include "base/geometry/rectiterator.h"
 
 namespace Base
 {
-    class PixelRectIterator;
+    class RectIterator;
 
     template<PixelOrReal T>
     struct Rect
@@ -15,10 +15,11 @@ namespace Base
         T y;
         T w;
         T h;
+        Real gridConstant;
 
         Rect();
-        Rect(const T x, const T y, const T w, const T h);
-        Rect(const Coordinate<T>& boundary1, const Coordinate<T>& boundary2);
+        Rect(const T x, const T y, const T w, const T h, Real gridConstant = 1.0);
+        Rect(const Coordinate<T>& boundary1, const Coordinate<T>& boundary2, Real gridConstant = 1.0);
 
         Coordinate<T> getMin() const;
         Coordinate<T> getMax() const;
@@ -34,12 +35,13 @@ namespace Base
         std::string to_string() const;
 
         template<class Q = T>
-        typename std::enable_if<std::is_integral<Q>::value, const PixelRectIterator>::type
+        typename std::enable_if<std::is_integral<Q>::value, const RectIterator>::type
         begin() const;
 
         template<class Q = T>
-        typename std::enable_if<std::is_integral<Q>::value, const PixelRectIterator>::type
+        typename std::enable_if<std::is_integral<Q>::value, const RectIterator>::type
         end() const;
+
     };
 }
 #endif // RECT_H

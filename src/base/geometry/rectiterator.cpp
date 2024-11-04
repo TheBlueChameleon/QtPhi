@@ -1,15 +1,16 @@
-#include "pixelrectiterator.h"
+#include "rectiterator.h"
 #include "rect.h"
 
 namespace Base
 {
-    PixelRectIterator::PixelRectIterator(const PixelRect& rect) :
+    RectIterator::RectIterator(const PixelRect& rect) :
         x(rect.x), y(rect.y), w(rect.w), h(rect.h),
+        gridConstant(rect.gridConstant),
         currentCoordinate(rect.getMin())
     {}
 
     // prefix operator
-    PixelRectIterator& PixelRectIterator::operator++()
+    RectIterator& RectIterator::operator++()
     {
         ++currentCoordinate.x;
         if (currentCoordinate.x >= x + w)
@@ -20,26 +21,26 @@ namespace Base
 
         if (currentCoordinate.y >= y + h)
         {
-            *this = PixelRectIterator();
+            *this = RectIterator();
         }
 
         return *this;
     }
 
     // postfix operator
-    PixelRectIterator PixelRectIterator::operator++(int)
+    RectIterator RectIterator::operator++(int)
     {
         const auto temp = *this;
         ++(*this);
         return temp;
     }
 
-    PixelRectIterator::reference PixelRectIterator::operator*() const
+    RectIterator::reference RectIterator::operator*() const
     {
         return currentCoordinate;
     }
 
-    PixelRectIterator::pointer PixelRectIterator::operator->() const
+    RectIterator::pointer RectIterator::operator->() const
     {
         return &currentCoordinate;
     }

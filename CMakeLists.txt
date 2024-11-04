@@ -55,7 +55,7 @@ add_library(Phi-base STATIC
     src/base/functions/functions.h          src/base/functions/functions.cpp
     src/base/geometry/coordinate.h          src/base/geometry/coordinate.cpp
     src/base/geometry/rect.h                src/base/geometry/rect.cpp
-    src/base/geometry/pixelrectiterator.h   src/base/geometry/pixelrectiterator.cpp
+    src/base/geometry/rectiterator.h        src/base/geometry/rectiterator.cpp
     src/base/grid/grid.h                    src/base/grid/grid.cpp
     src/base/grid/gridimpl.h                src/base/grid/gridimpl.cpp
     src/base/grid/imposablegrid.h           src/base/grid/imposablegrid.cpp

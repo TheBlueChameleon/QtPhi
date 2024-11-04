@@ -9,10 +9,10 @@ using namespace Base;
 void ImposableGridTest::clipping()
 {
     const Real gridConstant = 2.0;
-    const auto imposerDimensions = PixelRect(-1, -1, 3, 3);
+    const auto imposerDimensions = PixelRect(-1, -1, 3, 3, 1.0);
     const auto imposer = ImposableGrid<Real>(imposerDimensions, gridConstant);
 
-    const auto targetDimensions = PixelRect(-2, -2, 5, 5);
+    const auto targetDimensions = PixelRect(-2, -2, 5, 5, 1.0);
     const auto target = GridImpl<Real>(targetDimensions, gridConstant);
 
     const auto at_within = PixelCoordinate(+0, +0);
@@ -34,7 +34,7 @@ void ImposableGridTest::clipping()
      */
     QCOMPARE(
         imposer.getSrcRect(target, at_within),
-        PixelRect(-1, -1, 3, 3)
+        PixelRect(-1, -1, 3, 3, 1.0)
     );
 
     /* SCENARIO 2: CLIP OUT LOW COORDINATES
@@ -48,7 +48,7 @@ void ImposableGridTest::clipping()
      */
     QCOMPARE(
         imposer.getSrcRect(target, at_loClip),
-        PixelRect(0, 0, 2, 2)
+        PixelRect(0, 0, 2, 2, 1.0)
     );
 
     /* SCENARIO 2: CLIP OUT HIGH COORDINATES
@@ -62,18 +62,18 @@ void ImposableGridTest::clipping()
      */
     QCOMPARE(
         imposer.getSrcRect(target, at_hiClip),
-        PixelRect(-1, -1, 2, 2)
+        PixelRect(-1, -1, 2, 2, 1.0)
     );
 }
 
 void ImposableGridTest::impose()
 {
     const Real gridConstant = 2.0;
-    const auto imposerDimensions = PixelRect(-1, -1, 3, 3);
+    const auto imposerDimensions = PixelRect(-1, -1, 3, 3, 1.0);
     auto imposerScalar = ImposableGrid<Scalar>(imposerDimensions, gridConstant);
     auto imposerVector = ImposableGrid<Vector>(imposerDimensions, gridConstant);
 
-    const auto targetDimensions = PixelRect(-2, -2, 5, 5);
+    const auto targetDimensions = PixelRect(-2, -2, 5, 5, 1.0);
     auto targetScalar = GridImpl<Scalar>(targetDimensions, gridConstant);
     auto targetVector = GridImpl<Vector>(targetDimensions, gridConstant);
 
