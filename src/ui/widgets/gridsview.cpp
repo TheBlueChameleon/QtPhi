@@ -1,5 +1,8 @@
+#include <QWheelEvent>
+#include <iostream>
 #include <string>
 
+#include "base/interpolation/interpolation.h"
 #include "base/errors.h"
 
 #include "gridsview.h"
@@ -9,6 +12,9 @@ using namespace Base;
 
 namespace Gui
 {
+    const int tileSize = 15;
+    const int dotSize  = 10;
+
     GridsView::GridsView(QWidget* parent)
         : QWidget{parent}
     {
@@ -51,6 +57,23 @@ namespace Gui
     {
         arrowsGrid = newArrowsGrid;
         update(newArrowsGrid, Component::Arrows, title);
+    }
+
+    void GridsView::wheelEvent(QWheelEvent* event)
+    {
+        // TODO: enable only if also CTRL is pressed
+
+        const auto yRoll = event->angleDelta().y();
+        if (yRoll > 0)
+        {
+            gfxView->scale(1.25, 1.25);
+        }
+        if (yRoll < 0)
+        {
+            gfxView->scale(0.8, 0.8);
+        }
+
+        QWidget::wheelEvent(event);
     }
 
     void GridsView::update(const Grid* grid, const Component component, const std::string& title)
@@ -119,18 +142,110 @@ namespace Gui
             const auto color = tilesMap->get(value);
             brush.setColor(color);
 
-            scene->addRect(coord.x * 10, coord.y * 10, 10, 10, nullPen, brush);
+            scene->addRect(coord.x * tileSize, coord.y * tileSize,
+                           tileSize, tileSize,
+                           nullPen, brush
+                          );
         }
     }
 
     void GridsView::updateSceneDots()
     {
+        if (dotsGrid == nullptr)
+        {
+            return;
+        }
 
+        auto pen = QPen(Qt::SolidLine);
+        pen.setWidth(0);
+        const auto nullBrush = QBrush(Qt::NoBrush);
+
+        for (const auto coord : dotsGrid->getPixelDimensions())
+        {
+            const auto value = dotsGrid->get(coord);
+            const auto color = dotsMap->get(value);
+
+            const auto [min, max] = dotsMap->getRange();
+            const int thisDotSize =  Interpolation::linear<Real>(
+                                         std::abs(value),
+                                         (min < 0 ? 0: min), 0,
+                                         max, dotSize
+                                     );
+            const int dotSpacing = (tileSize - thisDotSize) / 2;
+
+            pen.setColor(color);
+
+            const auto xBase = coord.x * tileSize;
+            const auto yBase = coord.y * tileSize;
+
+            if (value > 0)
+            {
+                scene->addLine(xBase + dotSpacing, yBase + dotSpacing,
+                               xBase + tileSize - dotSpacing, yBase + tileSize - dotSpacing,
+                               pen
+                              );
+                scene->addLine(xBase + tileSize - dotSpacing, yBase + dotSpacing,
+                               xBase + dotSpacing, yBase + tileSize - dotSpacing,
+                               pen
+                              );
+            }
+            else
+            {
+                scene->addEllipse(xBase + dotSpacing, yBase + dotSpacing,
+                                  thisDotSize, thisDotSize,
+                                  pen, nullBrush
+                                 );
+            }
+        }
     }
 
     void GridsView::updateSceneArrows()
     {
+        if (arrowsGrid == nullptr)
+        {
+            return;
+        }
 
+        const auto nullBrush = QBrush(Qt::NoBrush);
+        auto pen = QPen(Qt::SolidLine);
+
+
+        const auto half = tileSize / 2;
+        const auto [min, max] = arrowsMap->getRange();
+
+        for (const auto coord : arrowsGrid->getPixelDimensions())
+        {
+            const auto value = arrowsGrid->get(coord);
+            const auto length = value.length();
+            if (length == 0)
+            {
+                continue;
+            }
+
+            const auto scale = Interpolation::linear<Real>(
+                                   length,
+                                   min, 0,
+                                   max, tileSize / (2 * length)
+                               );
+            const auto width = Interpolation::linear<Real>(
+                                   length,
+                                   min, 0,
+                                   max, 2
+                               );
+
+            const auto color = arrowsMap->get(length);
+
+            pen.setColor(color);
+            pen.setWidthF(width);
+
+            const auto xBase = coord.x * tileSize + half;
+            const auto yBase = coord.y * tileSize + half;
+
+            scene->addLine(xBase, yBase,
+                           xBase + value.x * scale, yBase + value.y * scale,
+                           pen
+                          );
+        }
     }
 
     void GridsView::updateLegend(const Grid* grid, ColorMapLegend*& legend, ColorMap*& map, const Component component, const std::string& title)

@@ -15,7 +15,7 @@ namespace Gui
         for (const auto point: tilesGrid.getPixelDimensions())
         {
             tilesGrid[point] = point.length() - 4;
-            dotsGrid[point] = point.length();
+            dotsGrid[point] = point.length() * (point.x > 0 ? 1 : -1);
             arrowGrid[point] = point.toRealCoordinate(1.0);
         }
 

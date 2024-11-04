@@ -52,6 +52,9 @@ namespace Gui
             void setDotsGrid(const   ScalarGrid* dotsGrid, const   std::string& title);
             void setArrowsGrid(const VectorGrid* arrowsGrid, const std::string& title);
 
+        public slots:
+            void wheelEvent(QWheelEvent* event);
+
         signals:
 
         private:
