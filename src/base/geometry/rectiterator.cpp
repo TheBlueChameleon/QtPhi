@@ -3,20 +3,37 @@
 
 namespace Base
 {
-    RectIterator::RectIterator(const PixelRect& rect) :
+    template<PixelOrReal T>
+    RectIterator<T>::RectIterator(const Rect<T>& rect) :
         x(rect.x), y(rect.y), w(rect.w), h(rect.h),
         gridConstant(rect.gridConstant),
         currentCoordinate(rect.getMin())
     {}
 
     // prefix operator
-    RectIterator& RectIterator::operator++()
+    template<PixelOrReal T>
+    RectIterator<T>& RectIterator<T>::operator++()
     {
-        ++currentCoordinate.x;
+        if constexpr(std::is_integral<T>::value)
+        {
+            ++currentCoordinate.x;
+        }
+        else
+        {
+            currentCoordinate.x += gridConstant;
+        }
+
         if (currentCoordinate.x >= x + w)
         {
             currentCoordinate.x = x;
-            ++currentCoordinate.y;
+            if constexpr(std::is_integral<T>::value)
+            {
+                ++currentCoordinate.y;
+            }
+            else
+            {
+                currentCoordinate.y += gridConstant;
+            }
         }
 
         if (currentCoordinate.y >= y + h)
@@ -28,20 +45,29 @@ namespace Base
     }
 
     // postfix operator
-    RectIterator RectIterator::operator++(int)
+    template<PixelOrReal T>
+    RectIterator<T> RectIterator<T>::operator++(int)
     {
         const auto temp = *this;
         ++(*this);
         return temp;
     }
 
-    RectIterator::reference RectIterator::operator*() const
+    template<PixelOrReal T>
+    RectIterator<T>::reference RectIterator<T>::operator*() const
     {
         return currentCoordinate;
     }
 
-    RectIterator::pointer RectIterator::operator->() const
+    template<PixelOrReal T>
+    RectIterator<T>::pointer RectIterator<T>::operator->() const
     {
         return &currentCoordinate;
     }
+
+    // ====================================================================== //
+    // instantiations
+
+    template class RectIterator<Pixel>;
+    template class RectIterator<Real>;
 }

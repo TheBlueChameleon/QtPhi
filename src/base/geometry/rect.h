@@ -6,8 +6,6 @@
 
 namespace Base
 {
-    class RectIterator;
-
     template<PixelOrReal T>
     struct Rect
     {
@@ -34,13 +32,9 @@ namespace Base
 
         std::string to_string() const;
 
-        template<class Q = T>
-        typename std::enable_if<std::is_integral<Q>::value, const RectIterator>::type
-        begin() const;
+        RectIterator<T> begin() const;
 
-        template<class Q = T>
-        typename std::enable_if<std::is_integral<Q>::value, const RectIterator>::type
-        end() const;
+        RectIterator<T> end() const;
 
     };
 }

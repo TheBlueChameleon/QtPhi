@@ -96,14 +96,35 @@ void RectTest::contains()
 
 void RectTest::iterator()
 {
-    const auto p = Rect(-1, -2, 3, 4, 1.0);
-    int count = 0;
+    const auto p = Rect<Pixel>(-1, -2, 3, 4, 2.0);
+    const auto r = Rect<Real>(-1, -2, 3, 4, 2.0);
 
+    int pCount = 0;
     for (const auto& c: p)
     {
-        ++count;
+        ++pCount;
         QVERIFY(p.contains(c));
     }
 
-    QCOMPARE(count, p.w * p.h);
+    QCOMPARE(pCount, p.w * p.h);
+
+    /* grid size is 3.0 x 4.0, so coordinates range from
+     * (-1, -2) (inclusive) to (+2, +2) (exclusive)
+     * # grid points
+     * * integer coordinates
+     *
+     *  (-1,-2)     (+1,-2)  (+2,-2)
+     *     #·····+·····#·····+
+     *     :           :     :
+     *     #·····+·····#·····+ y=0
+     *     :           :     :
+     *     (y=2 excluded)
+     */
+    int rCount = 0;
+    for (const auto& c: r)
+    {
+        ++rCount;
+        QVERIFY(r.contains(c));
+    }
+    QCOMPARE(rCount, 4);
 }

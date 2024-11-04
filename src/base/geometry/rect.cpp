@@ -123,19 +123,15 @@ namespace Base
     }
 
     template<PixelOrReal T>
-    template<class Q>
-    std::enable_if<std::is_integral<Q>::value, const RectIterator>::type
-    Rect<T>::begin() const
+    RectIterator<T> Rect<T>::begin() const
     {
-        return RectIterator(*this);
+        return RectIterator<T>(*this);
     }
 
     template<PixelOrReal T>
-    template<class Q>
-    std::enable_if<std::is_integral<Q>::value, const RectIterator>::type
-    Rect<T>::end() const
+    RectIterator<T> Rect<T>::end() const
     {
-        return RectIterator();
+        return RectIterator<T>();
     }
 
     // ====================================================================== //
@@ -143,7 +139,4 @@ namespace Base
 
     template struct Rect<Pixel>;
     template struct Rect<Real>;
-
-    template typename std::enable_if<std::is_integral<Pixel>::value, const RectIterator>::type Rect<Pixel>::begin<Pixel>() const;
-    template typename std::enable_if<std::is_integral<Pixel>::value, const RectIterator>::type Rect<Pixel>::end<Pixel>() const;
 }
